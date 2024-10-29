@@ -1,42 +1,45 @@
 import { Calculator } from './calculator';
 
 describe('test for calculator', () => {
-  it('#multiply should return 9', () => {
-    // Arrange
-    const calculator = new Calculator();
-    // Act
-    const rta = calculator.multiply(3, 3);
-    // Assert
-    expect(rta).toEqual(9);
-  });
+  describe('tests for multiply', () => {
+    it('should return 9', () => {
+      // Arrange
+      const calculator = new Calculator();
+      // Act
+      const rta = calculator.multiply(3, 3);
+      // Assert
+      expect(rta).toEqual(9);
+    });
 
-  it('#multiply should return 9', () => {
-    // Arrange
-    const calculator = new Calculator();
-    // Act
-    const rta = calculator.multiply(3, 3);
-    // Assert
-    expect(rta).toEqual(9);
+    it('should return 9', () => {
+      // Arrange
+      const calculator = new Calculator();
+      // Act
+      const rta = calculator.multiply(3, 3);
+      // Assert
+      expect(rta).toEqual(9);
+    });
   });
+  describe('tests for divide', () => {
+    it('for 0', () => {
+      // Arrange
+      const calculator = new Calculator();
+      // Act
+      const rta = calculator.devide(3, 0);
+      // Assert
+      expect(rta).toBeNull();
+    });
 
-  it('#divide for 0', () => {
-    // Arrange
-    const calculator = new Calculator();
-    // Act
-    const rta = calculator.devide(3, 0);
-    // Assert
-    expect(rta).toBeNull();
-  });
-
-  it('#divide should return some numbers', () => {
-    // Arrange
-    const calculator = new Calculator();
-    // Act
-    const rta = calculator.devide(6, 3);
-    const rta2 = calculator.devide(2, 2);
-    // Assert
-    expect(rta).toEqual(2);
-    expect(rta2).toEqual(1);
+    it('should return some numbers', () => {
+      // Arrange
+      const calculator = new Calculator();
+      // Act
+      const rta = calculator.devide(6, 3);
+      const rta2 = calculator.devide(2, 2);
+      // Assert
+      expect(rta).toEqual(2);
+      expect(rta2).toEqual(1);
+    });
   });
 
   it('test matches', () => {
