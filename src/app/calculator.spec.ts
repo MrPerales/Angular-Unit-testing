@@ -19,6 +19,15 @@ describe('test for calculator', () => {
     expect(rta).toEqual(9);
   });
 
+  it('#divide for 0', () => {
+    // Arrange
+    const calculator = new Calculator();
+    // Act
+    const rta = calculator.devide(3, 0);
+    // Assert
+    expect(rta).toBeNull();
+  });
+
   it('#divide should return some numbers', () => {
     // Arrange
     const calculator = new Calculator();
