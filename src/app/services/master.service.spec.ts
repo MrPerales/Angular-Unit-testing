@@ -31,4 +31,18 @@ describe('MasterService', () => {
     const masterService = new MasterService(fakeObject as ValueService);
     expect(masterService.getValue()).toBe('fake from object');
   });
+
+  // spies
+  it('should call to getValue from ValueServices', () => {
+    // nombre del servicio , [nombre o nombres de los metodos ]
+    const valueServiceSpy = jasmine.createSpyObj('ValueService', ['getValue']);
+    // solo retorna el valor lo cual no nos importa tanto en este test
+    valueServiceSpy.getValue.and.returnValue('fake value');
+    const masterService = new MasterService(valueServiceSpy);
+    expect(masterService.getValue()).toBe('fake value');
+    //fue llamado ?
+    expect(valueServiceSpy.getValue).toHaveBeenCalled();
+    // fue llamado n veces ?
+    expect(valueServiceSpy.getValue).toHaveBeenCalledTimes(1);
+  });
 });
