@@ -1,10 +1,19 @@
+import { TestBed } from '@angular/core/testing';
 import { ValueService } from './value.service';
 
 describe('ValueService', () => {
   let service: ValueService;
 
   beforeEach(() => {
-    service = new ValueService();
+    TestBed.configureTestingModule({
+      // colocamos los modulos que queramos
+      providers: [ValueService],
+    });
+
+    // colocamos el modulo que queremos inicializar
+    service = TestBed.inject(ValueService);
+    // ya no es necesario inicializar asi gracias a testBed
+    // service = new ValueService();
   });
 
   it('should be created', () => {
