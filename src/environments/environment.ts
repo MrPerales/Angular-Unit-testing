@@ -1,3 +1,3 @@
 export const environment = {
-  API_URL: 'https://api.escuelajs.co/',
+  API_URL: 'https://api.escuelajs.co',
 };
