@@ -6,7 +6,10 @@ import {
 } from '@angular/common/http/testing';
 import { Product } from '../models/product.model';
 import { environment } from '../../environments/environment';
-import { generateManyProducts } from '../models/product.mock';
+import {
+  generateManyProducts,
+  generateOneProduct,
+} from '../models/product.mock';
 
 fdescribe('Product Service ', () => {
   let productService: ProductsService;
@@ -47,6 +50,47 @@ fdescribe('Product Service ', () => {
       // reemplzamos la info
       req.flush(mockData);
       // varificamos si esta montado el mockData correctamente
+      httpController.verify();
+    });
+  });
+
+  describe('test for getAll', () => {
+    it('should return a product List', (doneFn) => {
+      const mockData: Product[] = generateManyProducts(3);
+
+      productService.getAll().subscribe((data) => {
+        expect(data.length).toEqual(mockData.length);
+        doneFn();
+      });
+
+      // http Config
+      const url = `${environment.API_URL}/api/v1/products`;
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
+      httpController.verify();
+    });
+
+    it('should retur products with taxes', (doneFn) => {
+      const mockData: Product[] = [
+        {
+          ...generateOneProduct(),
+          price: 100, // 100*.19 = 19
+        },
+        {
+          ...generateOneProduct(),
+          price: 200, // 200*.19 = 38
+        },
+      ];
+      //
+      productService.getAll().subscribe((data) => {
+        expect(data[0].taxes).toEqual(19);
+        expect(data[1].taxes).toEqual(38);
+        doneFn();
+      });
+      // http Config
+      const url = `${environment.API_URL}/api/v1/products`;
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
       httpController.verify();
     });
   });
