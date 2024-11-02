@@ -80,17 +80,70 @@ fdescribe('Product Service ', () => {
           ...generateOneProduct(),
           price: 200, // 200*.19 = 38
         },
+        {
+          ...generateOneProduct(),
+          price: 0, // 0*.19 = 0
+        },
+        {
+          ...generateOneProduct(),
+          price: -200, // -200*.19 = 38
+        },
       ];
       //
       productService.getAll().subscribe((data) => {
         expect(data[0].taxes).toEqual(19);
         expect(data[1].taxes).toEqual(38);
+        expect(data[2].taxes).toEqual(0);
+        expect(data[3].taxes).toEqual(0);
+
         doneFn();
       });
       // http Config
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
+      httpController.verify();
+    });
+    // params
+    it('should send query params width limit 10 offset 2', (doneFn) => {
+      const mockData: Product[] = generateManyProducts(3);
+      const limit = 10;
+      const offset = 2;
+      productService.getAll(limit, offset).subscribe((data) => {
+        expect(data.length).toEqual(mockData.length);
+        doneFn();
+      });
+
+      // http Config
+      const url = `${environment.API_URL}/api/v1/products?limit=${limit}&offset=${offset}`;
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
+      // obtenemos los parametros para testear
+      const params = req.request.params;
+      expect(params.get('limit')).toEqual(`${limit}`);
+      expect(params.get('offset')).toEqual(`${offset}`);
+
+      httpController.verify();
+    });
+
+    it('should send query params width limit 0 offset 0', (doneFn) => {
+      const mockData: Product[] = generateManyProducts(3);
+      const limit = 0;
+      const offset = 0;
+      productService.getAll(limit, offset).subscribe((data) => {
+        expect(data.length).toEqual(mockData.length);
+        doneFn();
+      });
+
+      // http Config
+      // quitamos el limit y el offset ya que son 0
+      const url = `${environment.API_URL}/api/v1/products`;
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
+      // obtenemos los parametros para testear
+      const params = req.request.params;
+      expect(params.get('limit')).toBeNull();
+      expect(params.get('offset')).toBeNull();
       httpController.verify();
     });
   });
