@@ -14,20 +14,34 @@ import {
   generateManyProducts,
   generateOneProduct,
 } from '../models/product.mock';
-import { HttpStatusCode } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
+import { TokenInterceptor } from '../interceptors/token.interceptor';
+import { TokenService } from './token.service';
 
 describe('Product Service ', () => {
   let productService: ProductsService;
   // para poder hacer moking HttpTestingController
   let httpController: HttpTestingController;
+  let tokenService: TokenService;
   beforeEach(() => {
     TestBed.configureTestingModule({
       // importamos el client testing ya que el servicio lo ocupa
       imports: [HttpClientTestingModule],
-      providers: [ProductsService],
+      providers: [
+        ProductsService,
+        // agregamos token services ya que lo utiliza el interceptor
+        TokenService,
+        // agregamos config para poder usar el interceptor en las pruebas
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: TokenInterceptor,
+          multi: true,
+        },
+      ],
     });
     productService = TestBed.inject(ProductsService);
     httpController = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
   afterEach(() => {
     // varificamos si esta montado el mockData correctamente
@@ -42,6 +56,10 @@ describe('Product Service ', () => {
     it('should return a product List ', (doneFn) => {
       // arrange
       const mockData: Product[] = generateManyProducts(2);
+      const mockToken = '123';
+      // Espiamos el servico por partes en este caso solo el metodo getToken (otra forma de spiar )
+      // y nos va a retornar el valor que queramos (mockToken)
+      spyOn(tokenService, 'getToken').and.returnValue(mockToken);
       // Act
       productService.getAllSimple().subscribe((data) => {
         // Assert
@@ -56,6 +74,9 @@ describe('Product Service ', () => {
       // expectOne => url que va a tomar encuenta para que no se hagan peticiones reales a la api
       // cuando vea que hacemos peticion a esa api lo va interceptar por asi decirlo
       const req = httpController.expectOne(url);
+      // obtenemos el header para comprobar que el token se obtiene correctamente
+      const headers = req.request.headers;
+      expect(headers.get('Authorization')).toEqual(`Bearer ${mockToken}`);
       // reemplzamos la info
       req.flush(mockData);
     });
@@ -220,7 +241,7 @@ describe('Product Service ', () => {
     });
   });
 
-  fdescribe('test for getOne', () => {
+  describe('test for getOne', () => {
     it('should return a product', (doneFn) => {
       const productId = '1';
       const mockData = generateOneProduct();
