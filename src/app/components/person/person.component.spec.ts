@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PersonComponent } from './person.component';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { Person } from '../../models/person.model';
 
 fdescribe('PersonComponent', () => {
   let component: PersonComponent;
@@ -25,6 +26,11 @@ fdescribe('PersonComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should the name be "Carlos"', () => {
+    component.person = new Person('Carlos', 'carlos', 30, 95, 1.9);
+    expect(component.person.name).toEqual('Carlos');
+  });
+
   // render tests
   it('should have <p> with "soy un parrafo"', () => {
     //obtenemso el elemento que se esta renderizando
@@ -45,5 +51,32 @@ fdescribe('PersonComponent', () => {
     const h3: HTMLElement = h3Debug.nativeElement;
     // probamos si la etiqueta p tiene ese texto
     expect(h3?.textContent).toEqual('person works!');
+  });
+
+  // render dinamico
+
+  it('should have <h4> with "Hola , soy {{person.name}}"', () => {
+    // arrange
+    component.person = new Person('<CARLOS>', 'carlos', 30, 95, 1.9);
+    const expectMessage = `Hola, soy ${component.person.name}`;
+    const personDebug: DebugElement = fixture.debugElement;
+    const h4Debug: DebugElement = personDebug.query(By.css('h4'));
+    const h4: HTMLElement = h4Debug.nativeElement;
+    // act
+    fixture.detectChanges(); //detectamos los cambios ya que se tiene que renderizar
+    // assert
+    expect(h4?.textContent).toEqual(expectMessage);
+  });
+  it('should have <span> with "mi altura es {{ person?.heigth }}"', () => {
+    // arrange
+    component.person = new Person('<CARLOS>', 'carlos', 30, 95, 1.9);
+    const personDebug: DebugElement = fixture.debugElement;
+    const spanDebug: DebugElement = personDebug.query(By.css('span'));
+    const span: HTMLElement = spanDebug.nativeElement;
+    // act
+    fixture.detectChanges();
+    // assert
+    //  toContain=>para saber si en una parte del elemento tiene la altura
+    expect(span?.textContent).toContain(component.person.heigth);
   });
 });
