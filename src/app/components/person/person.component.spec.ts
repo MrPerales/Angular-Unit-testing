@@ -79,4 +79,35 @@ fdescribe('PersonComponent', () => {
     //  toContain=>para saber si en una parte del elemento tiene la altura
     expect(span?.textContent).toContain(component.person.heigth);
   });
+
+  // botton
+  it('should display a text with IMC when call calcIMC ', () => {
+    component.person = new Person('Carlos', 'carlos', 30, 95, 1.9);
+    const personDebug: DebugElement = fixture.debugElement;
+    const buttonDebug: DebugElement = personDebug.query(
+      By.css('button.btn-imc') //select boton with class
+    );
+    const button: HTMLElement = buttonDebug.nativeElement;
+
+    component.calcIMC();
+    fixture.detectChanges();
+
+    expect(button?.textContent).toContain('overweigth');
+  });
+
+  // with click
+  it('should display a text with IMC when do click', () => {
+    component.person = new Person('Carlos', 'carlos', 30, 95, 1.9);
+    const personDebug: DebugElement = fixture.debugElement;
+    const buttonDebug: DebugElement = personDebug.query(
+      By.css('button.btn-imc') //select boton with class
+    );
+    const button: HTMLElement = buttonDebug.nativeElement;
+    // emulacion del click
+    // ('tipo de evento', parametros )
+    buttonDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    expect(button?.textContent).toContain('overweigth');
+  });
 });
