@@ -27,4 +27,14 @@ export class Person {
       return 'not found';
     }
   }
+
+  calcBirthYear(): number {
+    if (this.age <= 0) {
+      return 0;
+    }
+    const date = new Date();
+    const currentYear = date.getFullYear();
+    const birthYear = currentYear - this.age;
+    return birthYear;
+  }
 }

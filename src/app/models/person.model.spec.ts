@@ -26,4 +26,18 @@ fdescribe('test for Person', () => {
       expect(rta).toEqual('normal');
     });
   });
+
+  describe('test for calcBirthYea', () => {
+    it('shoudl return 0', () => {
+      person.age = -1;
+
+      const rta = person.calcBirthYear();
+      expect(rta).toEqual(0);
+    });
+    it('should return 2000', () => {
+      person.age = 24;
+      const rta = person.calcBirthYear();
+      expect(rta).toEqual(2000);
+    });
+  });
 });
