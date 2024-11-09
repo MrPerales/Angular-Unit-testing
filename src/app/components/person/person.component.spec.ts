@@ -110,4 +110,27 @@ fdescribe('PersonComponent', () => {
 
     expect(button?.textContent).toContain('overweigth');
   });
+
+  // tests outputs
+  it('should raise selected event when do click', (dondeFn) => {
+    const expectPerson = new Person('Carlos', 'carlos', 30, 95, 1.9);
+    component.person = expectPerson;
+    const personDebug: DebugElement = fixture.debugElement;
+    const buttonDebug: DebugElement = personDebug.query(
+      By.css('button.btn-choose')
+    );
+
+    // provamos si el output funciona correctamente
+    // como es un observable podemos subscribie
+    let selectedPerson: Person | undefined;
+    component.onSelected.subscribe((data) => {
+      selectedPerson = data;
+      dondeFn();
+    });
+    // act
+    buttonDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    // la persona seleccionada sea igual a la que envie como input
+    expect(selectedPerson).toEqual(expectPerson);
+  });
 });
