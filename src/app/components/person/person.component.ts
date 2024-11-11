@@ -11,6 +11,7 @@ import { Person } from '../../models/person.model';
 export class PersonComponent {
   @Input() person!: Person;
   @Output() onSelected = new EventEmitter<Person>();
+  @Output() onCalcBithYear = new EventEmitter<number>();
   imc = '';
   constructor() {}
 
@@ -20,5 +21,8 @@ export class PersonComponent {
 
   onClick() {
     this.onSelected.emit(this.person);
+  }
+  onBirthYear() {
+    this.onCalcBithYear.emit(this.person.calcBirthYear());
   }
 }

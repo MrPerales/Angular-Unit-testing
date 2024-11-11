@@ -112,7 +112,7 @@ fdescribe('PersonComponent', () => {
   });
 
   // tests outputs
-  it('should raise selected event when do click', (dondeFn) => {
+  it('should raise selected event when do click', (doneFn) => {
     const expectPerson = new Person('Carlos', 'carlos', 30, 95, 1.9);
     component.person = expectPerson;
     const personDebug: DebugElement = fixture.debugElement;
@@ -125,12 +125,29 @@ fdescribe('PersonComponent', () => {
     let selectedPerson: Person | undefined;
     component.onSelected.subscribe((data) => {
       selectedPerson = data;
-      dondeFn();
+      doneFn();
     });
     // act
     buttonDebug.triggerEventHandler('click', null);
     fixture.detectChanges();
     // la persona seleccionada sea igual a la que envie como input
     expect(selectedPerson).toEqual(expectPerson);
+  });
+  it('should raise calcBirthYear event when do click', (doneFn) => {
+    const expectPerson = new Person('Carlos', 'carlos', 31, 95, 1.9);
+    component.person = expectPerson;
+    const mockYear = 1993;
+    const personDebug: DebugElement = fixture.debugElement;
+    const buttonDebug: DebugElement = personDebug.query(
+      By.css('button.btn-birthYear')
+    );
+    component.onCalcBithYear.subscribe((year) => {
+      expect(year).toEqual(expectPerson.calcBirthYear());
+      expect(year).toEqual(mockYear);
+
+      doneFn();
+    });
+    buttonDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
   });
 });
