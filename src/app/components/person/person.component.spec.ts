@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PersonComponent } from './person.component';
-import { DebugElement } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Person } from '../../models/person.model';
 
-fdescribe('PersonComponent', () => {
+describe('PersonComponent', () => {
   let component: PersonComponent;
   //fixture => ambiente para poder interactuar con el componente
   let fixture: ComponentFixture<PersonComponent>;
@@ -149,5 +149,67 @@ fdescribe('PersonComponent', () => {
     });
     buttonDebug.triggerEventHandler('click', null);
     fixture.detectChanges();
+  });
+});
+// prueba aislada al componente
+// El objetivo de un HostComponente es probar los
+// input y outputs de un componente chiquito.
+// Aislarlo de la logica general del componente padre
+@Component({
+  standalone: true,
+  imports: [PersonComponent],
+  template: `<app-person
+    [person]="person"
+    (onSelected)="onSelected($event)"
+  ></app-person>`,
+})
+class HostComponent {
+  person = new Person('name', 'lastName', 30, 80, 1.67);
+  selectedPerson: Person | undefined;
+  onSelected(per: Person) {
+    console.log(per);
+    this.selectedPerson = per;
+  }
+}
+
+fdescribe('PersonComponent from HostComponent', () => {
+  let component: HostComponent;
+  let fixture: ComponentFixture<HostComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HostComponent, PersonComponent],
+    }).compileComponents();
+    fixture = TestBed.createComponent(HostComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges(); // ciclo de vida de angular
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+  // input
+  it('should display person name ', () => {
+    // arrange
+    const expectName = component.person.name;
+    // const expectName = 'name';
+
+    const h4Debug = fixture.debugElement.query(By.css('app-person h4'));
+    const h4 = h4Debug.nativeElement;
+    // act
+    fixture.detectChanges();
+    // assert
+    expect(h4.textContent).toContain(expectName);
+  });
+  // output
+  it('should raise selected event when clicked', () => {
+    // arrange
+    const btnDebug = fixture.debugElement.query(
+      By.css('app-person .btn-choose')
+    );
+    // act
+    btnDebug.triggerEventHandler('click', null);
+    // assert
+    expect(component.selectedPerson).toEqual(component.person);
   });
 });
