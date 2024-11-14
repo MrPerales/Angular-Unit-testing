@@ -38,4 +38,30 @@ fdescribe('PeopleComponent', () => {
     // assert
     expect(debugElement.length).toEqual(4);
   });
+  it('should render a person when is selected ', () => {
+    // arrange
+    component.people = [
+      new Person('User1', 'lastName1', 30, 95, 1.9),
+      new Person('User2', 'lastName2', 20, 50, 1.3),
+      new Person('User3', 'lastName3', 10, 20, 1.4),
+      new Person('User4', 'lastName4', 15, 15, 1.1),
+    ];
+    const btnDebug = fixture.debugElement.query(
+      By.css('app-person .btn-choose')
+    );
+    // act
+    btnDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    //obtenemos el li despues de darle click ya que solo se renderiza
+    // cuando contiene una person por el if en el html
+    const liDebug = fixture.debugElement.queryAll(By.css('ul li'));
+    // ya que del debug obtenemos  una lista de elementos los seleccionamos uno a uno
+    // (por queryAll)
+    const liName = liDebug[0].nativeElement;
+    const liAge = liDebug[1].nativeElement;
+
+    // assert
+    expect(liName.textContent).toContain(component.people[0].name);
+    expect(liAge.textContent).toContain(component.people[0].age);
+  });
 });
