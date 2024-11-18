@@ -12,14 +12,22 @@ import { CardProductComponent } from '../card-product/card-product.component';
 })
 export class ProductsComponent {
   products: Product[] = [];
+  limit = 10;
+  offset = 0;
+  status: 'loading' | 'success' | 'init' | 'error' = 'init';
   constructor(private productService: ProductsService) {}
 
   ngOnInit(): void {
     this.getAllProducts();
   }
   getAllProducts() {
-    return this.productService
-      .getAll()
-      .subscribe((products) => (this.products = products));
+    this.status = 'loading';
+    this.productService
+      .getAll(this.limit, this.offset)
+      .subscribe((products) => {
+        this.products = [...this.products, ...products];
+        this.offset += this.limit; //paginacion
+        this.status = 'success';
+      });
   }
 }
