@@ -22,12 +22,19 @@ export class ProductsComponent {
   }
   getAllProducts() {
     this.status = 'loading';
-    this.productService
-      .getAll(this.limit, this.offset)
-      .subscribe((products) => {
+    this.productService.getAll(this.limit, this.offset).subscribe({
+      next: (products) => {
         this.products = [...this.products, ...products];
         this.offset += this.limit; //paginacion
         this.status = 'success';
-      });
+      },
+      error: (error) => {
+        // setTimeout solo para fines practicos en el test
+        setTimeout(() => {
+          this.products = [];
+          this.status = 'error';
+        }, 3000);
+      },
+    });
   }
 }

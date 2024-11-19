@@ -1,10 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 
 import { ProductsComponent } from './products.component';
 import { CardProductComponent } from '../card-product/card-product.component';
 import { ProductsService } from '../../services/product.service';
 import { generateManyProducts } from '../../models/product.mock';
-import { of } from 'rxjs';
+import { defer, of } from 'rxjs';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -63,5 +68,41 @@ fdescribe('ProductsComponent', () => {
       // render
       expect(figcaption).toBeTruthy();
     });
+
+    it('should change the status "loading" => "success"', fakeAsync(() => {
+      // arrenge
+      const producstMock = generateManyProducts(10);
+      productService.getAll.and.returnValue(
+        // defer => emula la demora ya que el observable se crea hasta que te suscribes a el
+        //emulamos una promesa para no usar un of el cual haria que se suscriba y porque vamos a usar el tick
+        defer(() => Promise.resolve(producstMock))
+      );
+
+      // act
+      productComponent.getAllProducts();
+      fixture.detectChanges();
+      expect(productComponent.status).toEqual('loading');
+      // tick =>se utiliza con fakeAsync y es para ejecutar todo lo que este pendiente
+      // por resolvese por ejemplo
+      tick(); //observable , setTimeout, promise
+      fixture.detectChanges(); //deteccion de cambios para que cambie el status
+      // assert
+      expect(productComponent.status).toEqual('success');
+    }));
+
+    it('should change the status "loading" => "error"', fakeAsync(() => {
+      // arrange
+      productService.getAll.and.returnValue(
+        defer(() => Promise.reject('error'))
+      );
+      // act
+      productComponent.getAllProducts();
+      fixture.detectChanges();
+      expect(productComponent.status).toEqual('loading');
+      // assert
+      tick(4000); //4000 por el setTimeout ,cuanta es la espera
+      fixture.detectChanges();
+      expect(productComponent.status).toEqual('error');
+    }));
   });
 });
