@@ -55,7 +55,7 @@ fdescribe('ProductsComponent', () => {
   });
 
   describe('test for getAllProducts', () => {
-    it('should return product list from service', () => {
+    it('should return product list from service', fakeAsync(() => {
       // arrange
       const producstMock = generateManyProducts(10);
       productService.getAll.and.returnValue(of(producstMock));
@@ -66,9 +66,10 @@ fdescribe('ProductsComponent', () => {
         By.css('app-card-product figure figcaption')
       );
       const figcaption: HTMLElement = productDebug.nativeElement;
-
+      const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
       // act
-      productComponent.getAllProducts();
+      btnDebug.triggerEventHandler('click', null);
+      tick();
       fixture.detectChanges();
       // assert
       expect(productComponent.products.length).toEqual(
@@ -76,7 +77,7 @@ fdescribe('ProductsComponent', () => {
       );
       // render
       expect(figcaption).toBeTruthy();
-    });
+    }));
 
     it('should change the status "loading" => "success"', fakeAsync(() => {
       // arrenge
@@ -86,9 +87,9 @@ fdescribe('ProductsComponent', () => {
         //emulamos una promesa para no usar un of el cual haria que se suscriba y porque vamos a usar el tick
         defer(() => Promise.resolve(producstMock))
       );
-
+      const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
       // act
-      productComponent.getAllProducts();
+      btnDebug.triggerEventHandler('click', null);
       fixture.detectChanges();
       expect(productComponent.status).toEqual('loading');
       // tick =>se utiliza con fakeAsync y es para ejecutar todo lo que este pendiente
@@ -104,8 +105,9 @@ fdescribe('ProductsComponent', () => {
       productService.getAll.and.returnValue(
         defer(() => Promise.reject('error'))
       );
+      const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
       // act
-      productComponent.getAllProducts();
+      btnDebug.triggerEventHandler('click', null);
       fixture.detectChanges();
       expect(productComponent.status).toEqual('loading');
       // assert

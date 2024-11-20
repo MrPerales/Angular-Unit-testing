@@ -8,7 +8,11 @@
     <app-card-product [product]="product"></app-card-product>
     }
   </div>
-  <button [disabled]="status === 'loading'" (click)="getAllProducts()">
+  <button
+    class="btn-getProducts"
+    [disabled]="status === 'loading'"
+    (click)="getAllProducts()"
+  >
     @if(status === 'success' || status=== 'init'){
 
     <span>load more</span>
