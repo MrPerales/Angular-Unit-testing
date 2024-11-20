@@ -1,8 +1,8 @@
 <section class="container">
   <h1>Products component</h1>
   <h3>rta</h3>
-  <button (click)="callPromise()">Call Promise</button>
-  <p>{{ rta }}</p>
+  <button class="btn-promise" (click)="callPromise()">Call Promise</button>
+  <p class="rta">{{ rta }}</p>
   <div class="my-grid">
     @for (product of products; track $index) {
     <app-card-product [product]="product"></app-card-product>

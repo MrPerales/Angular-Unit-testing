@@ -128,5 +128,24 @@ fdescribe('ProductsComponent', () => {
       expect(productComponent.rta).toEqual(mockMessage);
       expect(valueService.getPromiseValue).toHaveBeenCalled();
     });
+
+    it('should show "my mock Message" in <p> when btn was click', fakeAsync(() => {
+      // arrange
+      const mockMessage = 'my mock Message';
+      valueService.getPromiseValue.and.returnValue(
+        Promise.resolve(mockMessage)
+      );
+      const btnDebug = fixture.debugElement.query(By.css('.btn-promise'));
+      btnDebug.triggerEventHandler('click', null);
+      tick(); // ya que no estamos llamando directamente al metodo y
+      // no podemos controlar ese asyncronismo por eso se utiliza el tick
+      // act
+      fixture.detectChanges();
+      const pDebug = fixture.debugElement.query(By.css('.rta'));
+      const p: HTMLElement = pDebug.nativeElement;
+      // assert
+      expect(productComponent.rta).toEqual(mockMessage);
+      expect(p.textContent).toEqual(mockMessage);
+    }));
   });
 });
