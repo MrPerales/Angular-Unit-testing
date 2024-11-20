@@ -12,26 +12,35 @@ import { generateManyProducts } from '../../models/product.mock';
 import { defer, of } from 'rxjs';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { ValueService } from '../../services/value.service';
 
 fdescribe('ProductsComponent', () => {
   let productComponent: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productService: jasmine.SpyObj<ProductsService>; //TiPADO de spy
+  let valueService: jasmine.SpyObj<ValueService>;
 
   beforeEach(async () => {
     const productServiceSpy = jasmine.createSpyObj('ProductsService', [
       'getAll',
     ]); //spy
+    const valueServiceSpy = jasmine.createSpyObj('ValueService', [
+      'getPromiseValue',
+    ]);
     await TestBed.configureTestingModule({
       imports: [ProductsComponent, CardProductComponent],
-      providers: [{ provide: ProductsService, useValue: productServiceSpy }], //
+      providers: [
+        { provide: ProductsService, useValue: productServiceSpy },
+        { provide: ValueService, useValue: valueServiceSpy },
+      ], //
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProductsComponent);
     productComponent = fixture.componentInstance;
     productService = TestBed.inject(
       ProductsService
-    ) as jasmine.SpyObj<ProductsService>; //productService como spia
+    ) as jasmine.SpyObj<ProductsService>; //productService como
+    valueService = TestBed.inject(ValueService) as jasmine.SpyObj<ValueService>;
 
     const producstMock = generateManyProducts(5);
     // simulamos el ejecutar el servicio ,como nos tiene que retornar un observable usamos "of"
@@ -104,5 +113,20 @@ fdescribe('ProductsComponent', () => {
       fixture.detectChanges();
       expect(productComponent.status).toEqual('error');
     }));
+  });
+  describe('Tests for callPromise', () => {
+    it('should call to promise', async () => {
+      // arrange
+      const mockMessage = 'my mock Message';
+      valueService.getPromiseValue.and.returnValue(
+        Promise.resolve(mockMessage)
+      );
+      // act
+      await productComponent.callPromise();
+      fixture.detectChanges();
+      // assert
+      expect(productComponent.rta).toEqual(mockMessage);
+      expect(valueService.getPromiseValue).toHaveBeenCalled();
+    });
   });
 });

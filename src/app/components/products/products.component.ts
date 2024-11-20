@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ProductsService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { CardProductComponent } from '../card-product/card-product.component';
+import { ValueService } from '../../services/value.service';
 
 @Component({
   selector: 'app-products',
@@ -15,7 +16,11 @@ export class ProductsComponent {
   limit = 10;
   offset = 0;
   status: 'loading' | 'success' | 'init' | 'error' = 'init';
-  constructor(private productService: ProductsService) {}
+  rta: string = '';
+  constructor(
+    private productService: ProductsService,
+    private valueService: ValueService
+  ) {}
 
   ngOnInit(): void {
     this.getAllProducts();
@@ -36,5 +41,10 @@ export class ProductsComponent {
         }, 3000);
       },
     });
+  }
+
+  async callPromise() {
+    const rta = await this.valueService.getPromiseValue();
+    this.rta = rta;
   }
 }
