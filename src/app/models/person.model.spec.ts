@@ -1,6 +1,6 @@
 import { Person } from './person.model';
 
-fdescribe('test for Person', () => {
+describe('test for Person', () => {
   let person: Person;
   beforeEach(() => {
     person = new Person('Carlos', 'carlos', 30, 100, 1.9);

@@ -14,7 +14,7 @@ import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ValueService } from '../../services/value.service';
 
-fdescribe('ProductsComponent', () => {
+describe('ProductsComponent', () => {
   let productComponent: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productService: jasmine.SpyObj<ProductsService>; //TiPADO de spy
