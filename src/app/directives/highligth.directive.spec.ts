@@ -1,21 +1,25 @@
-// nota para hacer tests es mejor usar un HostComponent
+// nota para hacer tests de directivas es mejor usar un HostComponent
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HighligthDirective } from './highligth.directive';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
-  imports: [HighligthDirective],
+  imports: [HighligthDirective, FormsModule],
   template: `
     <h5 class="title" highligth>background Default</h5>
     <h5 highligth="pink">background con input</h5>
     <p highligth="blue">parrafo</p>
     <p>otro parrafo</p>
+    <input [(ngModel)]="color" [highligth]="color" />
   `,
 })
-class HostComponent {}
+class HostComponent {
+  color = 'blue';
+}
 
 // TESTS
 fdescribe('Tests for HighligthDirective', () => {
@@ -25,7 +29,7 @@ fdescribe('Tests for HighligthDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HostComponent],
+      imports: [HostComponent, FormsModule],
     }).compileComponents(); //compila los componentes importados
 
     // ya que acabe de compilar los componentes
@@ -43,11 +47,11 @@ fdescribe('Tests for HighligthDirective', () => {
     const elements = fixture.debugElement.queryAll(
       By.directive(HighligthDirective)
     );
-    expect(elements.length).toEqual(3);
+    expect(elements.length).toEqual(4); //4 ya que el input lo toma y no a la vez
   });
   it('shoudl have one element without directive', () => {
     const element = fixture.debugElement.queryAll(By.css('*:not([highligth])'));
-    expect(element.length).toEqual(1);
+    expect(element.length).toEqual(2); //2 ya que el input lo toma y no a la vez
   });
   it('should the elements be match with bgColor', () => {
     const elements = fixture.debugElement.queryAll(
@@ -64,5 +68,19 @@ fdescribe('Tests for HighligthDirective', () => {
     expect(titleDebug.nativeElement.style.backgroundColor).toEqual(
       directiva.defaultColor
     );
+  });
+  // test input
+  it('should bind <input> and change the bgColor', () => {
+    const inputDebug = fixture.debugElement.query(By.css('input'));
+    const inputElement: HTMLInputElement = inputDebug.nativeElement;
+
+    expect(inputElement.style.backgroundColor).toEqual('blue');
+
+    inputElement.value = 'orange'; //lo que escribe el usuario
+    inputElement.dispatchEvent(new Event('input')); //para simular que el usiario esta escribiendo
+    fixture.detectChanges();
+
+    expect(inputElement.style.backgroundColor).toEqual('orange');
+    expect(component.color).toEqual('orange'); // como le cambiamos el valor y gracias al ngModel cambiamos la propiedad color
   });
 });
