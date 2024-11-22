@@ -4,4 +4,8 @@
   <h5 highligth>background Default</h5>
   <h5 highligth="pink">background con input</h5>
   <input [(ngModel)]="color" [highligth]="color" />
+  <h3>pipe</h3>
+  <p>{{ "Hola Mundo" | reverse }}</p>
+  <input [(ngModel)]="text" />
+  <p>{{ text | reverse }}</p>
 </section>
