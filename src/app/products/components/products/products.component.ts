@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ProductsService } from '../../services/product.service';
-import { Product } from '../../models/product.model';
-import { CardProductComponent } from '../card-product/card-product.component';
-import { ValueService } from '../../services/value.service';
+import { ProductsService } from '../../../services/product.service';
+import { Product } from '../../../models/product.model';
+import { CardProductComponent } from './../card-product/card-product.component';
+import { ValueService } from '../../../services/value.service';
 
 @Component({
   selector: 'app-products',

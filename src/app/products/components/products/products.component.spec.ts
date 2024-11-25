@@ -7,12 +7,12 @@ import {
 
 import { ProductsComponent } from './products.component';
 import { CardProductComponent } from '../card-product/card-product.component';
-import { ProductsService } from '../../services/product.service';
-import { generateManyProducts } from '../../models/product.mock';
+import { ProductsService } from '../../../services/product.service';
+import { generateManyProducts } from '../../../models/product.mock';
 import { defer, of } from 'rxjs';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { ValueService } from '../../services/value.service';
+import { ValueService } from '../../../services/value.service';
 
 describe('ProductsComponent', () => {
   let productComponent: ProductsComponent;
