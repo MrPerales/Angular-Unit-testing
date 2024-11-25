@@ -22,7 +22,7 @@ class HostComponent {
 }
 
 // TESTS
-fdescribe('Tests for HighligthDirective', () => {
+describe('Tests for HighligthDirective', () => {
   let component: HostComponent;
   //fixture => ambiente para poder interactuar con el componente
   let fixture: ComponentFixture<HostComponent>;
