@@ -1,0 +1,110 @@
+<section class="container">
+  <h5>Register</h5>
+  <form
+    [formGroup]="form"
+    novalidate
+    (ngSubmit)="register($event)"
+    autocomplete="off"
+  >
+    <div>
+      <div class="grid">
+        <label for="name">
+          Full Name
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Full Name"
+            formControlName="name"
+            [attr.aria-invalid]="nameField?.touched ? nameField?.invalid : ''"
+          />
+          @if (nameField?.touched && nameField?.errors) { @if(
+          nameField?.hasError('required')){
+
+          <small>*Required</small>
+          } }
+        </label>
+
+        <label for="email">
+          Email address
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email address"
+            formControlName="email"
+            [attr.aria-invalid]="emailField?.touched ? emailField?.invalid : ''"
+          />
+          @if (emailField?.touched && emailField?.errors) { @if
+          (emailField?.hasError('required')) {
+
+          <small>*Required</small>
+          } @if (emailField?.hasError('email')) {
+
+          <small>*It's not a email</small>
+          } }
+        </label>
+      </div>
+
+      <label for="password">
+        Password
+        <input
+          type="password"
+          id="password"
+          name="email"
+          placeholder="Password"
+          formControlName="password"
+          [attr.aria-invalid]="
+            passwordField?.touched ? passwordField?.invalid : ''
+          "
+        />
+        @if (passwordField?.touched && passwordField?.errors) { @if
+        (passwordField?.hasError('required')) {
+
+        <small>*Required</small>
+        } @if (passwordField?.hasError('minlength')) {
+
+        <small>*Should be greater 6</small>
+        } @if (passwordField?.hasError('invalid_password')) {
+
+        <small>*Should contain numbers</small>
+        } }
+      </label>
+
+      <label for="confirmPassword">
+        Confirm Password
+        <input
+          type="password"
+          id="confirmPassword"
+          name="email"
+          placeholder="Confirm password"
+          formControlName="confirmPassword"
+          [attr.aria-invalid]="
+            confirmPasswordField?.touched ? form.hasError('match_password') : ''
+          "
+        />
+        @if (confirmPasswordField?.touched && form.errors) { @if
+        (form.hasError('match_password')) {
+
+        <small>*Not matching</small>
+        } }
+      </label>
+
+      <fieldset>
+        <label for="terms">
+          <input
+            type="checkbox"
+            id="terms"
+            name="terms"
+            formControlName="checkTerms"
+            [attr.aria-invalid]="
+              checkTermsField?.touched ? checkTermsField?.invalid : ''
+            "
+          />
+          I agree to the Terms and Conditions
+        </label>
+      </fieldset>
+      <button type="submit">Register</button>
+    </div>
+  </form>
+</section>
