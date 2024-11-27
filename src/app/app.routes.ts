@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ProductsComponent } from './products/components/products/products.component';
 import { PicoPreviewComponent } from './components/pico-preview/pico-preview.component';
 import { PeopleComponent } from './components/people/people.component';
 import { OthersComponent } from './components/others/others.component';
@@ -7,7 +6,7 @@ import { OthersComponent } from './components/others/others.component';
 export const routes: Routes = [
   {
     path: 'products',
-    component: ProductsComponent,
+    loadChildren: () => import('./products/products.routes'),
   },
   {
     path: 'pico-preview',
@@ -20,5 +19,9 @@ export const routes: Routes = [
   {
     path: 'others',
     component: OthersComponent,
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.routes'),
   },
 ];
