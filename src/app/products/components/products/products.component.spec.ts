@@ -9,10 +9,10 @@ import { ProductsComponent } from './products.component';
 import { CardProductComponent } from '../card-product/card-product.component';
 import { ProductsService } from '../../../services/product.service';
 import { generateManyProducts } from '../../../models/product.mock';
-import { defer, of } from 'rxjs';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ValueService } from '../../../services/value.service';
+import { asyncData, asyncError, mockObservable } from './../../../../testing';
 
 describe('ProductsComponent', () => {
   let productComponent: ProductsComponent;
@@ -45,7 +45,7 @@ describe('ProductsComponent', () => {
     const producstMock = generateManyProducts(5);
     // simulamos el ejecutar el servicio ,como nos tiene que retornar un observable usamos "of"
     // y nos retorna el productMock
-    productService.getAll.and.returnValue(of(producstMock));
+    productService.getAll.and.returnValue(mockObservable(producstMock)); //refactorizado
     fixture.detectChanges(); //ngOnInit
   });
 
@@ -58,7 +58,7 @@ describe('ProductsComponent', () => {
     it('should return product list from service', fakeAsync(() => {
       // arrange
       const producstMock = generateManyProducts(10);
-      productService.getAll.and.returnValue(of(producstMock));
+      productService.getAll.and.returnValue(mockObservable(producstMock)); //refectorizado
       //se agrega un contador ya que en el beforeEach ya tenemos una cierta cantidad de productos
       // y para que no falle solo los agregamos en el expect
       const countPrev = productComponent.products.length;
@@ -83,9 +83,8 @@ describe('ProductsComponent', () => {
       // arrenge
       const producstMock = generateManyProducts(10);
       productService.getAll.and.returnValue(
-        // defer => emula la demora ya que el observable se crea hasta que te suscribes a el
         //emulamos una promesa para no usar un of el cual haria que se suscriba y porque vamos a usar el tick
-        defer(() => Promise.resolve(producstMock))
+        asyncData(producstMock)
       );
       const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
       // act
@@ -102,9 +101,7 @@ describe('ProductsComponent', () => {
 
     it('should change the status "loading" => "error"', fakeAsync(() => {
       // arrange
-      productService.getAll.and.returnValue(
-        defer(() => Promise.reject('error'))
-      );
+      productService.getAll.and.returnValue(asyncError('error')); //promesa reject
       const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
       // act
       btnDebug.triggerEventHandler('click', null);
