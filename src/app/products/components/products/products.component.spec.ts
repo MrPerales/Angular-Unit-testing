@@ -10,9 +10,15 @@ import { CardProductComponent } from '../card-product/card-product.component';
 import { ProductsService } from '../../../services/product.service';
 import { generateManyProducts } from '../../../models/product.mock';
 import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { ValueService } from '../../../services/value.service';
-import { asyncData, asyncError, mockObservable } from './../../../../testing';
+import {
+  asyncData,
+  asyncError,
+  mockObservable,
+  mockPromise,
+  query,
+  queryById,
+} from './../../../../testing';
 
 describe('ProductsComponent', () => {
   let productComponent: ProductsComponent;
@@ -62,11 +68,16 @@ describe('ProductsComponent', () => {
       //se agrega un contador ya que en el beforeEach ya tenemos una cierta cantidad de productos
       // y para que no falle solo los agregamos en el expect
       const countPrev = productComponent.products.length;
-      const productDebug: DebugElement = fixture.debugElement.query(
-        By.css('app-card-product figure figcaption')
+      // const productDebug: DebugElement = fixture.debugElement.query(
+      //   By.css('app-card-product figure figcaption')
+      // );
+      const productDebug: DebugElement = query(
+        fixture,
+        'app-card-product figure figcaption'
       );
       const figcaption: HTMLElement = productDebug.nativeElement;
-      const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
+      // const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
+      const btnDebug = queryById(fixture, 'btn-getProducts');
       // act
       btnDebug.triggerEventHandler('click', null);
       tick();
@@ -86,7 +97,7 @@ describe('ProductsComponent', () => {
         //emulamos una promesa para no usar un of el cual haria que se suscriba y porque vamos a usar el tick
         asyncData(producstMock)
       );
-      const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
+      const btnDebug = queryById(fixture, 'btn-getProducts');
       // act
       btnDebug.triggerEventHandler('click', null);
       fixture.detectChanges();
@@ -102,7 +113,7 @@ describe('ProductsComponent', () => {
     it('should change the status "loading" => "error"', fakeAsync(() => {
       // arrange
       productService.getAll.and.returnValue(asyncError('error')); //promesa reject
-      const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
+      const btnDebug = queryById(fixture, 'btn-getProducts');
       // act
       btnDebug.triggerEventHandler('click', null);
       fixture.detectChanges();
@@ -117,9 +128,7 @@ describe('ProductsComponent', () => {
     it('should call to promise', async () => {
       // arrange
       const mockMessage = 'my mock Message';
-      valueService.getPromiseValue.and.returnValue(
-        Promise.resolve(mockMessage)
-      );
+      valueService.getPromiseValue.and.returnValue(mockPromise(mockMessage));
       // act
       await productComponent.callPromise();
       fixture.detectChanges();
@@ -131,16 +140,16 @@ describe('ProductsComponent', () => {
     it('should show "my mock Message" in <p> when btn was click', fakeAsync(() => {
       // arrange
       const mockMessage = 'my mock Message';
-      valueService.getPromiseValue.and.returnValue(
-        Promise.resolve(mockMessage)
-      );
-      const btnDebug = fixture.debugElement.query(By.css('.btn-promise'));
+      valueService.getPromiseValue.and.returnValue(mockPromise(mockMessage));
+      // const btnDebug = fixture.debugElement.query(By.css('.btn-promise'));
+      const btnDebug = queryById(fixture, 'btn-promise');
       btnDebug.triggerEventHandler('click', null);
       tick(); // ya que no estamos llamando directamente al metodo y
       // no podemos controlar ese asyncronismo por eso se utiliza el tick
       // act
       fixture.detectChanges();
-      const pDebug = fixture.debugElement.query(By.css('.rta'));
+      // const pDebug = fixture.debugElement.query(By.css('.rta'));
+      const pDebug = queryById(fixture, 'rta');
       const p: HTMLElement = pDebug.nativeElement;
       // assert
       expect(productComponent.rta).toEqual(mockMessage);
