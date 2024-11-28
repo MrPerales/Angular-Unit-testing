@@ -14,6 +14,7 @@ import { ValueService } from '../../../services/value.service';
 import {
   asyncData,
   asyncError,
+  getText,
   mockObservable,
   mockPromise,
   query,
@@ -148,12 +149,12 @@ describe('ProductsComponent', () => {
       // no podemos controlar ese asyncronismo por eso se utiliza el tick
       // act
       fixture.detectChanges();
-      // const pDebug = fixture.debugElement.query(By.css('.rta'));
-      const pDebug = queryById(fixture, 'rta');
-      const p: HTMLElement = pDebug.nativeElement;
+      // const pDebug = queryById(fixture, 'rta');
+      // const p: HTMLElement = pDebug.nativeElement;
+      const pText = getText(fixture, 'rta'); //como solo ocupamos el texto nos ahorramos 2 lineas
       // assert
       expect(productComponent.rta).toEqual(mockMessage);
-      expect(p.textContent).toEqual(mockMessage);
+      expect(pText).toEqual(mockMessage);
     }));
   });
 });
