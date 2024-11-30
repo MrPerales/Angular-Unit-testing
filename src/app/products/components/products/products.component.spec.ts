@@ -14,6 +14,7 @@ import { ValueService } from '../../../services/value.service';
 import {
   asyncData,
   asyncError,
+  clickEvent,
   getText,
   mockObservable,
   mockPromise,
@@ -78,9 +79,10 @@ describe('ProductsComponent', () => {
       );
       const figcaption: HTMLElement = productDebug.nativeElement;
       // const btnDebug = fixture.debugElement.query(By.css('.btn-getProducts'));
-      const btnDebug = queryById(fixture, 'btn-getProducts');
+      // const btnDebug = queryById(fixture, 'btn-getProducts');
       // act
-      btnDebug.triggerEventHandler('click', null);
+      clickEvent(fixture, 'btn-getProducts', true); //nos ahorramos la lienas 82 y 85
+      // btnDebug.triggerEventHandler('click', null);
       tick();
       fixture.detectChanges();
       // assert
@@ -98,9 +100,11 @@ describe('ProductsComponent', () => {
         //emulamos una promesa para no usar un of el cual haria que se suscriba y porque vamos a usar el tick
         asyncData(producstMock)
       );
-      const btnDebug = queryById(fixture, 'btn-getProducts');
+      // const btnDebug = queryById(fixture, 'btn-getProducts');
       // act
-      btnDebug.triggerEventHandler('click', null);
+      // btnDebug.triggerEventHandler('click', null);
+      clickEvent(fixture, 'btn-getProducts', true);
+
       fixture.detectChanges();
       expect(productComponent.status).toEqual('loading');
       // tick =>se utiliza con fakeAsync y es para ejecutar todo lo que este pendiente
@@ -114,9 +118,10 @@ describe('ProductsComponent', () => {
     it('should change the status "loading" => "error"', fakeAsync(() => {
       // arrange
       productService.getAll.and.returnValue(asyncError('error')); //promesa reject
-      const btnDebug = queryById(fixture, 'btn-getProducts');
+      // const btnDebug = queryById(fixture, 'btn-getProducts');
       // act
-      btnDebug.triggerEventHandler('click', null);
+      // btnDebug.triggerEventHandler('click', null);
+      clickEvent(fixture, 'btn-getProducts', true);
       fixture.detectChanges();
       expect(productComponent.status).toEqual('loading');
       // assert
@@ -143,8 +148,9 @@ describe('ProductsComponent', () => {
       const mockMessage = 'my mock Message';
       valueService.getPromiseValue.and.returnValue(mockPromise(mockMessage));
       // const btnDebug = fixture.debugElement.query(By.css('.btn-promise'));
-      const btnDebug = queryById(fixture, 'btn-promise');
-      btnDebug.triggerEventHandler('click', null);
+      // const btnDebug = queryById(fixture, 'btn-promise');
+      // btnDebug.triggerEventHandler('click', null);
+      clickEvent(fixture, 'btn-promise', true);
       tick(); // ya que no estamos llamando directamente al metodo y
       // no podemos controlar ese asyncronismo por eso se utiliza el tick
       // act
