@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterFormComponent } from './register-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
+import { getText, query } from '../../../../testing';
 
 fdescribe('RegisterFormComponent', () => {
   let component: RegisterFormComponent;
@@ -81,5 +82,22 @@ fdescribe('RegisterFormComponent', () => {
       checkTerms: true,
     });
     expect(component.form.invalid).toBeTruthy();
+  });
+
+  // render html
+  it('should the nameField be invvalid from UI', () => {
+    const inputDebug = query(fixture, 'input#name'); //por id
+    const inputElement: HTMLInputElement = inputDebug.nativeElement;
+
+    inputElement.value = '';
+    inputElement.dispatchEvent(new Event('input'));
+    inputElement.dispatchEvent(new Event('blur')); //desenfoque para que aparesca el mensaje si es valido o no (para el small)
+    fixture.detectChanges();
+
+    expect(component.nameField?.invalid).withContext('empty').toBeTruthy();
+
+    // comporbando el mensaje en el small
+    const textError = getText(fixture, 'nameField-required');
+    expect(textError).toContain('Required');
   });
 });

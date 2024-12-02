@@ -21,7 +21,7 @@
           @if (nameField?.touched && nameField?.errors) { @if(
           nameField?.hasError('required')){
 
-          <small>*Required</small>
+          <small data-testid="nameField-required">*Required</small>
           } }
         </label>
 
@@ -38,10 +38,10 @@
           @if (emailField?.touched && emailField?.errors) { @if
           (emailField?.hasError('required')) {
 
-          <small>*Required</small>
+          <small data-testid="emailField-required ">*Required</small>
           } @if (emailField?.hasError('email')) {
 
-          <small>*It's not a email</small>
+          <small data-testid="emailField-error">*It's not a email</small>
           } }
         </label>
       </div>
@@ -61,13 +61,15 @@
         @if (passwordField?.touched && passwordField?.errors) { @if
         (passwordField?.hasError('required')) {
 
-        <small>*Required</small>
+        <small data-testid="passwordField-required">*Required</small>
         } @if (passwordField?.hasError('minlength')) {
 
-        <small>*Should be greater 6</small>
+        <small data-testid="passwordField-error">*Should be greater 6</small>
         } @if (passwordField?.hasError('invalid_password')) {
 
-        <small>*Should contain numbers</small>
+        <small data-testid="passwordField-errorNumbers"
+          >*Should contain numbers</small
+        >
         } }
       </label>
 
@@ -86,7 +88,7 @@
         @if (confirmPasswordField?.touched && form.errors) { @if
         (form.hasError('match_password')) {
 
-        <small>*Not matching</small>
+        <small data-testid="confirmPasswordField-error">*Not matching</small>
         } }
       </label>
 
