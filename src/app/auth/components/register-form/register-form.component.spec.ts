@@ -3,7 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterFormComponent } from './register-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
-import { getText, query, setInputValue } from '../../../../testing';
+import {
+  getText,
+  query,
+  setInputCheckbox,
+  setInputValue,
+} from '../../../../testing';
 
 fdescribe('RegisterFormComponent', () => {
   let component: RegisterFormComponent;
@@ -84,7 +89,7 @@ fdescribe('RegisterFormComponent', () => {
     expect(component.form.invalid).toBeTruthy();
   });
 
-  // render html
+  // render html name
   it('should the nameField be invvalid from UI', () => {
     const inputDebug = query(fixture, 'input#name'); //por id
     const inputElement: HTMLInputElement = inputDebug.nativeElement;
@@ -110,5 +115,87 @@ fdescribe('RegisterFormComponent', () => {
     // comporbando el mensaje en el small
     const textError = getText(fixture, 'nameField-required');
     expect(textError).toContain('Required');
+  });
+
+  // render html email
+  it('should the emailField be invvalid from UI', () => {
+    // wrong email
+    setInputValue(fixture, 'input#email', 'esto no es un email');
+    fixture.detectChanges();
+    expect(component.emailField?.invalid)
+      .withContext('wrong email')
+      .toBeTruthy();
+
+    const textError = getText(fixture, 'emailField-error');
+    expect(textError)
+      .withContext('error message')
+      .toContain("It's not a email");
+
+    // empty
+    setInputValue(fixture, 'input#email', '');
+    fixture.detectChanges();
+    expect(component.emailField?.invalid).withContext('empty').toBeTruthy();
+    const textErrorRequired = getText(fixture, 'emailField-required');
+    expect(textErrorRequired).withContext('required').toContain('Required');
+  });
+
+  // render html password
+  it('should the passwordField be invalid from UI', () => {
+    // empty
+    setInputValue(fixture, 'input#password', '');
+    fixture.detectChanges();
+    expect(component.passwordField?.invalid).withContext('empty').toBeTruthy();
+
+    const textErrorRequired = getText(fixture, 'passwordField-required');
+    expect(textErrorRequired).withContext('required').toContain('Required');
+
+    // password lenght
+    setInputValue(fixture, 'input#password', '1234');
+    fixture.detectChanges();
+    expect(component.passwordField?.invalid)
+      .withContext('lenght 5')
+      .toBeTruthy();
+
+    const textErrorLenght = getText(fixture, 'passwordField-error');
+    expect(textErrorLenght)
+      .withContext('lenght')
+      .toContain('Should be greater 6');
+
+    // password without numbers
+    setInputValue(fixture, 'input#password', 'qwertyu');
+    fixture.detectChanges();
+    expect(component.passwordField?.invalid)
+      .withContext('without numbers')
+      .toBeTruthy();
+
+    const textErrorNumbers = getText(fixture, 'passwordField-errorNumbers');
+    expect(textErrorNumbers)
+      .withContext('without numbers')
+      .toContain('Should contain numbers');
+  });
+  // render html confirmpassword
+  // it('should the confirmPasswordField be invalid from UI', () => {
+  //   // password
+  //   // setInputValue(fixture, 'input#password', 'password1234');
+  //   setInputValue(fixture, 'input#confirmPassword', 'password123');
+  //   fixture.detectChanges();
+  //   expect(component.confirmPasswordField?.invalid)
+  //     .withContext('not match')
+  //     .toBeTruthy();
+  //   // const textError = getText(fixture, 'confirmPasswordField-error');
+  //   // expect(textError).withContext('text not match').toContain('Not matching');
+  // });
+
+  // render html terms
+  it('should checkbox be invalid from UI', () => {
+    setInputCheckbox(fixture, 'input#terms', false);
+    fixture.detectChanges();
+    expect(component.checkTermsField?.invalid)
+      .withContext('checkbox')
+      .toBeTruthy();
+
+    const checkboxDebug = query(fixture, 'input#terms');
+    const checkboxElement: HTMLInputElement = checkboxDebug.nativeElement;
+    expect(checkboxElement.checked).toBeFalsy(); //falsy ya que no esta seleccionado
   });
 });

@@ -35,13 +35,13 @@
             formControlName="email"
             [attr.aria-invalid]="emailField?.touched ? emailField?.invalid : ''"
           />
-          @if (emailField?.touched && emailField?.errors) { @if
-          (emailField?.hasError('required')) {
+          @if (emailField?.touched && emailField?.errors) {
+          @if(emailField?.hasError('required')) {
+          <small data-testid="emailField-required">*Required</small>
 
-          <small data-testid="emailField-required ">*Required</small>
           } @if (emailField?.hasError('email')) {
-
           <small data-testid="emailField-error">*It's not a email</small>
+
           } }
         </label>
       </div>
@@ -58,8 +58,8 @@
             passwordField?.touched ? passwordField?.invalid : ''
           "
         />
-        @if (passwordField?.touched && passwordField?.errors) { @if
-        (passwordField?.hasError('required')) {
+        @if (passwordField?.touched && passwordField?.errors) {
+        @if(passwordField?.hasError('required')) {
 
         <small data-testid="passwordField-required">*Required</small>
         } @if (passwordField?.hasError('minlength')) {
@@ -78,7 +78,7 @@
         <input
           type="password"
           id="confirmPassword"
-          name="email"
+          name="confirmPassword"
           placeholder="Confirm password"
           formControlName="confirmPassword"
           [attr.aria-invalid]="
