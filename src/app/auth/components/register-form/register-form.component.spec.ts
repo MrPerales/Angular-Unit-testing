@@ -5,10 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import {
   getText,
+  mockObservable,
   query,
   setInputCheckbox,
   setInputValue,
 } from '../../../../testing';
+import { generateOneUser } from '../../../models/user.mock';
 
 fdescribe('RegisterFormComponent', () => {
   let component: RegisterFormComponent;
@@ -197,5 +199,31 @@ fdescribe('RegisterFormComponent', () => {
     const checkboxDebug = query(fixture, 'input#terms');
     const checkboxElement: HTMLInputElement = checkboxDebug.nativeElement;
     expect(checkboxElement.checked).toBeFalsy(); //falsy ya que no esta seleccionado
+  });
+  it('should the form be invalid', () => {
+    component.form.patchValue({
+      name: 'Carlos',
+      email: 'carlos@mail.com',
+      confirmPassword: '123456',
+      password: '123456',
+      checkTerms: false,
+    });
+    expect(component.form.invalid).toBeTruthy();
+  });
+
+  it('should send the form successfully', () => {
+    component.form.patchValue({
+      name: 'Carlos',
+      email: 'carlos@mail.com',
+      confirmPassword: '123456',
+      password: '123456',
+      checkTerms: true,
+    });
+    const mockUser = generateOneUser();
+    userService.create.and.returnValue(mockObservable(mockUser)); //spy
+    // act
+    component.register(new Event('submit'));
+    expect(component.form.valid).toBeTruthy();
+    expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
   });
 });

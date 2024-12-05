@@ -16,8 +16,6 @@ import { UserService } from '../../../services/user.service';
   styleUrl: './register-form.component.scss',
 })
 export class RegisterFormComponent {
-  constructor(private fb: FormBuilder, private usersService: UserService) {}
-
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(5)]],
     email: ['', [Validators.required, Validators.email]],
@@ -32,15 +30,18 @@ export class RegisterFormComponent {
     confirmPassword: ['', [Validators.required]],
     checkTerms: [false, [Validators.requiredTrue]],
   });
+
+  constructor(private fb: FormBuilder, private usersService: UserService) {}
+
   register(event: Event) {
     event.preventDefault();
     if (this.form.valid) {
-      const value = this.form.value;
+      const value: any = this.form.value; // revisar bien el tipado any
       console.log(value);
 
-      // this.usersService.create(value).subscribe((rta) => {
-      //   console.log(rta);
-      // });
+      this.usersService.create(value).subscribe((rta) => {
+        console.log(rta);
+      });
     } else {
       this.form.markAllAsTouched();
     }
