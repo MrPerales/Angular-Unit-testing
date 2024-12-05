@@ -34,6 +34,6 @@ export function setInputCheckbox<T>(
   }
   const inputElement: HTMLInputElement = debugElement.nativeElement;
   inputElement.checked = value;
-  inputElement.dispatchEvent(new Event('input'));
+  inputElement.dispatchEvent(new Event('change'));
   inputElement.dispatchEvent(new Event('blur'));
 }
