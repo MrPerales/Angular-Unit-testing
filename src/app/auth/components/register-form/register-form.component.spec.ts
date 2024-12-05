@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import {
   asyncData,
+  clickElement,
   getText,
   mockObservable,
   query,
@@ -246,6 +247,29 @@ fdescribe('RegisterFormComponent', () => {
 
     component.register(new Event('submit'));
     expect(component.status).toEqual('loading');
+
+    tick();
+    fixture.detectChanges();
+    expect(component.status).toEqual('success');
+
+    expect(component.form.valid).toBeTruthy();
+    expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
+  }));
+
+  it('should send the form succcessfully from UI', fakeAsync(() => {
+    setInputValue(fixture, 'input#name', 'Carlos');
+    setInputValue(fixture, 'input#email', 'Carlos@mail.com');
+    setInputValue(fixture, 'input#password', '123456');
+    setInputValue(fixture, 'input#confirmPassword', '123456');
+    setInputCheckbox(fixture, 'input#terms', true);
+
+    const mockUser = generateOneUser();
+    userService.create.and.returnValue(asyncData(mockUser));
+
+    // query(fixture, 'form').triggerEventHandler('ngSubmit', new Event('submit'));//otra forma
+    clickElement(fixture, 'btn-submit', true); //hacemos click en el btn
+    expect(component.status).toEqual('loading');
+    fixture.detectChanges();
 
     tick();
     fixture.detectChanges();
