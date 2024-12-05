@@ -25,9 +25,9 @@ export function clickElement<T>(
 ) {
   let debugElement;
   if (withTestId) {
-    debugElement = query(fixture, selector);
-  } else {
     debugElement = queryById(fixture, selector);
+  } else {
+    debugElement = query(fixture, selector);
   }
   const element: HTMLElement = debugElement.nativeElement;
   element.click();
