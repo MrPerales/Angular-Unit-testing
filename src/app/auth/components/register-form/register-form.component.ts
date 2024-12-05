@@ -33,14 +33,19 @@ export class RegisterFormComponent {
 
   constructor(private fb: FormBuilder, private usersService: UserService) {}
 
+  status: 'loading' | 'success' | 'error' | 'init' = 'init';
+
   register(event: Event) {
     event.preventDefault();
     if (this.form.valid) {
+      this.status = 'loading';
       const value: any = this.form.value; // revisar bien el tipado any
-      console.log(value);
+      // console.log(value);
 
       this.usersService.create(value).subscribe((rta) => {
-        console.log(rta);
+        // console.log(rta);
+        // redirect
+        this.status = 'success';
       });
     } else {
       this.form.markAllAsTouched();

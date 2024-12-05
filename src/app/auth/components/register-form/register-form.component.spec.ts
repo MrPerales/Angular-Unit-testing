@@ -1,9 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 
 import { RegisterFormComponent } from './register-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import {
+  asyncData,
   getText,
   mockObservable,
   query,
@@ -226,4 +232,26 @@ fdescribe('RegisterFormComponent', () => {
     expect(component.form.valid).toBeTruthy();
     expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
   });
+
+  it('should send the form successfully and status "loading" => "success"', fakeAsync(() => {
+    component.form.patchValue({
+      name: 'Carlos',
+      email: 'carlos@mail.com',
+      confirmPassword: '123456',
+      password: '123456',
+      checkTerms: true,
+    });
+    const mockUser = generateOneUser();
+    userService.create.and.returnValue(asyncData(mockUser)); //async data para tener el control con tick()
+
+    component.register(new Event('submit'));
+    expect(component.status).toEqual('loading');
+
+    tick();
+    fixture.detectChanges();
+    expect(component.status).toEqual('success');
+
+    expect(component.form.valid).toBeTruthy();
+    expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
+  }));
 });
