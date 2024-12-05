@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker/.';
+import { faker } from '@faker-js/faker';
 import { User } from './user.model';
 
 export function generateOneUser(): User {
