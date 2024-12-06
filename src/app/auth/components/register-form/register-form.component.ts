@@ -42,10 +42,16 @@ export class RegisterFormComponent {
       const value: any = this.form.value; // revisar bien el tipado any
       // console.log(value);
 
-      this.usersService.create(value).subscribe((rta) => {
-        // console.log(rta);
-        // redirect
-        this.status = 'success';
+      this.usersService.create(value).subscribe({
+        next: (rta) => {
+          // console.log(rta);
+          // redirect
+          this.status = 'success';
+        },
+        error: (error) => {
+          // redirect
+          this.status = 'error';
+        },
       });
     } else {
       this.form.markAllAsTouched();

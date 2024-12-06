@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import {
   asyncData,
+  asyncError,
   clickElement,
   getText,
   mockObservable,
@@ -274,6 +275,28 @@ fdescribe('RegisterFormComponent', () => {
     tick();
     fixture.detectChanges();
     expect(component.status).toEqual('success');
+
+    expect(component.form.valid).toBeTruthy();
+    expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
+  }));
+
+  it('should send the form  from UI but with server error', fakeAsync(() => {
+    setInputValue(fixture, 'input#name', 'Carlos');
+    setInputValue(fixture, 'input#email', 'Carlos@mail.com');
+    setInputValue(fixture, 'input#password', '123456');
+    setInputValue(fixture, 'input#confirmPassword', '123456');
+    setInputCheckbox(fixture, 'input#terms', true);
+
+    const mockUser = generateOneUser();
+    userService.create.and.returnValue(asyncError(mockUser));
+
+    clickElement(fixture, 'btn-submit', true); //hacemos click en el btn
+    expect(component.status).toEqual('loading');
+    fixture.detectChanges();
+
+    tick();
+    fixture.detectChanges();
+    expect(component.status).toEqual('error');
 
     expect(component.form.valid).toBeTruthy();
     expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
