@@ -15,12 +15,15 @@ export class MyValidators {
     if (!containsNumber(value)) {
       return { invalid_password: true };
     }
-    return null;
+    return null; //null => todo Ok
   }
 
   static matchPasswords(control: AbstractControl) {
     const password = control?.get('password')?.value;
     const confirmPassword = control?.get('confirmPassword')?.value;
+    if (password === undefined || confirmPassword === undefined) {
+      throw new Error('matchPasswords : fields not found');
+    }
     if (password !== confirmPassword) {
       return { match_password: true };
     }
