@@ -18,7 +18,11 @@ import { UserService } from '../../../services/user.service';
 export class RegisterFormComponent {
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(5)]],
-    email: ['', [Validators.required, Validators.email]],
+    email: [
+      '',
+      [Validators.required, Validators.email],
+      [MyValidators.validateEmailAsync(this.usersService)], //useService por que utiliza ese validor
+    ],
     password: [
       '',
       [

@@ -1,5 +1,7 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { MyValidators } from './validators';
+import { UserService } from '../services/user.service';
+import { mockObservable } from '../../testing';
 
 fdescribe('Tests for MyValidators', () => {
   describe('tests for isPriceValid', () => {
@@ -61,6 +63,33 @@ fdescribe('Tests for MyValidators', () => {
       // para testear throw necesitamos mandarlo como function
       const fn = () => MyValidators.matchPasswords(group);
       expect(fn).toThrow(new Error('matchPasswords : fields not found'));
+    });
+  });
+
+  describe('test for validateEmailAsync', () => {
+    it('should return null with valid email ', (doneFn) => {
+      // Arrange
+      // mocking
+      const userService: jasmine.SpyObj<UserService> = jasmine.createSpyObj(
+        'UserService',
+        ['isAvalibleByEmail']
+      );
+      const control = new FormControl('carlos@mail.com');
+      // act
+      userService.isAvalibleByEmail.and.returnValue(
+        mockObservable({ isAvalible: true })
+      );
+      const validator = MyValidators.validateEmailAsync(userService); //solo tenemos la funcion ya que nos pide un servicio
+      // mandamos el valor del campo para que lo valide el cual es un observable y nos podemos subcribir
+      validator(control).subscribe({
+        next: (rta) => {
+          // assert
+          console.log(rta);
+
+          expect(rta).toBeNull();
+          doneFn();
+        },
+      });
     });
   });
 });

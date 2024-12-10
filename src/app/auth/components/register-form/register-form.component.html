@@ -42,6 +42,11 @@
           } @if (emailField?.hasError('email')) {
           <small data-testid="emailField-error">*It's not a email</small>
 
+          } @if (emailField?.hasError('not_available')) {
+          <small data-testid="emailField-not_available"
+            >*The email is alredy register</small
+          >
+
           } }
         </label>
       </div>
