@@ -72,17 +72,17 @@ fdescribe('Tests for MyValidators', () => {
       // mocking
       const userService: jasmine.SpyObj<UserService> = jasmine.createSpyObj(
         'UserService',
-        ['isAvalibleByEmail']
+        ['isAvailableByEmail']
       );
       const control = new FormControl('carlos@mail.com');
       // act
-      userService.isAvalibleByEmail.and.returnValue(
-        mockObservable({ isAvalible: true })
+      userService.isAvailableByEmail.and.returnValue(
+        mockObservable({ isAvailable: true })
       );
       const validator = MyValidators.validateEmailAsync(userService); //solo tenemos la funcion ya que nos pide un servicio
       // mandamos el valor del campo para que lo valide el cual es un observable y nos podemos subcribir
       validator(control).subscribe({
-        next: (rta) => {
+        next: (rta: any) => {
           // assert
           console.log(rta);
 

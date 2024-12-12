@@ -18,8 +18,8 @@ export class UserService {
   getAll() {
     return this.http.get<User[]>(this.apiUrl);
   }
-  isAvalibleByEmail(email: string) {
-    return this.http.post<{ isAvalible: boolean }>(
+  isAvailableByEmail(email: string) {
+    return this.http.post<{ isAvailable: boolean }>(
       `${this.apiUrl}/is-available`,
       { email }
     );

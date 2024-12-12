@@ -34,9 +34,9 @@ export class MyValidators {
   static validateEmailAsync(service: UserService) {
     return (control: AbstractControl) => {
       const value = control.value;
-      return service.isAvalibleByEmail(value).pipe(
+      return service.isAvailableByEmail(value).pipe(
         map((response) => {
-          const isAvailable = response.isAvalible;
+          const isAvailable = response.isAvailable;
           if (!isAvailable) {
             return { not_available: true };
           }
