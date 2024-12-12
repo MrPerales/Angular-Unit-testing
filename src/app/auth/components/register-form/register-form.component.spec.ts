@@ -26,7 +26,10 @@ fdescribe('RegisterFormComponent', () => {
   let userService: jasmine.SpyObj<UserService>;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('UserService', ['create']);
+    const spy = jasmine.createSpyObj('UserService', [
+      'create',
+      'isAvalibleByEmail',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [RegisterFormComponent, ReactiveFormsModule],
@@ -36,6 +39,10 @@ fdescribe('RegisterFormComponent', () => {
     fixture = TestBed.createComponent(RegisterFormComponent);
     component = fixture.componentInstance;
     userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
+    //ya que en algunos tests utilizan al utilizar el metodo "create" este mismo utiliza el otro metodo "isAvalibleByEmail"
+    userService.isAvalibleByEmail.and.returnValue(
+      mockObservable({ isAvalible: true })
+    );
     fixture.detectChanges();
   });
 
@@ -147,6 +154,24 @@ fdescribe('RegisterFormComponent', () => {
     expect(component.emailField?.invalid).withContext('empty').toBeTruthy();
     const textErrorRequired = getText(fixture, 'emailField-required');
     expect(textErrorRequired).withContext('required').toContain('Required');
+  });
+  it('should show error with an email invalid', () => {
+    userService.isAvalibleByEmail.and.returnValue(
+      mockObservable({ isAvalible: false })
+    );
+    setInputValue(fixture, 'input#email', 'carlos@mail.com');
+    // act
+    fixture.detectChanges();
+
+    // assert
+    expect(component.emailField?.invalid).toBeTrue();
+    expect(userService.isAvalibleByEmail).toHaveBeenCalledWith(
+      'carlos@mail.com'
+    );
+    const textError = getText(fixture, 'emailField-not_available');
+    expect(textError)
+      .withContext('error message')
+      .toContain('The email is alredy register');
   });
 
   // render html password
