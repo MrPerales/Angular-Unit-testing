@@ -3,7 +3,7 @@ import { MyValidators } from './validators';
 import { UserService } from '../services/user.service';
 import { mockObservable } from '../../testing';
 
-fdescribe('Tests for MyValidators', () => {
+describe('Tests for MyValidators', () => {
   describe('tests for isPriceValid', () => {
     it('should return null when the price is rigth ', () => {
       // Arrange
