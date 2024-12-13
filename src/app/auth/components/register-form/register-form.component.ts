@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { MyValidators } from '../../../utils/validators';
 import { UserService } from '../../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -35,7 +36,11 @@ export class RegisterFormComponent {
     checkTerms: [false, [Validators.requiredTrue]],
   });
 
-  constructor(private fb: FormBuilder, private usersService: UserService) {}
+  constructor(
+    private fb: FormBuilder,
+    private usersService: UserService,
+    private router: Router
+  ) {}
 
   status: 'loading' | 'success' | 'error' | 'init' = 'init';
 
@@ -51,6 +56,7 @@ export class RegisterFormComponent {
           // console.log(rta);
           // redirect
           this.status = 'success';
+          this.router.navigateByUrl('/login');
         },
         error: (error) => {
           // redirect

@@ -19,26 +19,33 @@ import {
   setInputValue,
 } from '../../../../testing';
 import { generateOneUser } from '../../../models/user.mock';
+import { Router } from '@angular/router';
 
-describe('RegisterFormComponent', () => {
+fdescribe('RegisterFormComponent', () => {
   let component: RegisterFormComponent;
   let fixture: ComponentFixture<RegisterFormComponent>;
   let userService: jasmine.SpyObj<UserService>;
+  let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     const spy = jasmine.createSpyObj('UserService', [
       'create',
       'isAvailableByEmail',
     ]);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
 
     await TestBed.configureTestingModule({
       imports: [RegisterFormComponent, ReactiveFormsModule],
-      providers: [{ provide: UserService, useValue: spy }],
+      providers: [
+        { provide: UserService, useValue: spy },
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterFormComponent);
     component = fixture.componentInstance;
     userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     //ya que en algunos tests utilizan al utilizar el metodo "create" este mismo utiliza el otro metodo "isavailableByEmail"
     userService.isAvailableByEmail.and.returnValue(
       mockObservable({ isAvailable: true })
@@ -258,6 +265,10 @@ describe('RegisterFormComponent', () => {
     component.register(new Event('submit'));
     expect(component.form.valid).toBeTruthy();
     expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
+    // routing
+    expect(router.navigateByUrl)
+      .withContext('routerCalled')
+      .toHaveBeenCalledWith('/login');
   });
 
   it('should send the form successfully and status "loading" => "success"', fakeAsync(() => {
@@ -280,6 +291,10 @@ describe('RegisterFormComponent', () => {
 
     expect(component.form.valid).toBeTruthy();
     expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
+    // routing
+    expect(router.navigateByUrl)
+      .withContext('routerCalled')
+      .toHaveBeenCalledWith('/login');
   }));
 
   it('should send the form succcessfully from UI', fakeAsync(() => {
@@ -303,6 +318,10 @@ describe('RegisterFormComponent', () => {
 
     expect(component.form.valid).toBeTruthy();
     expect(userService.create).withContext('haveBeenCalled').toHaveBeenCalled();
+    // routing
+    expect(router.navigateByUrl)
+      .withContext('routerCalled')
+      .toHaveBeenCalledWith('/login');
   }));
 
   it('should send the form  from UI but with server error', fakeAsync(() => {
