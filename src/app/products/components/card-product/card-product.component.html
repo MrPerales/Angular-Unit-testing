@@ -6,4 +6,5 @@
     </figcaption>
   </figure>
   <p>{{ product.description | slice : 0 : 50 }}</p>
+  <a [routerLink]="['./', product.id]"> Ver detalle </a>
 </div>
