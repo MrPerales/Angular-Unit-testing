@@ -6,8 +6,14 @@ import { provideRouter } from '@angular/router';
 import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { mockObservable } from '../../../../testing';
+import {
+  getText,
+  getTextHarness,
+  mockObservable,
+  queryById,
+} from '../../../../testing';
 import { generateOneProduct } from '../../../models/product.mock';
+import { By } from '@angular/platform-browser';
 
 fdescribe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;
@@ -44,7 +50,9 @@ fdescribe('ProductDetailComponent', () => {
 
     location = TestBed.inject(Location) as jasmine.SpyObj<Location>;
     component = fixture.componentInstance;
+  });
 
+  it('should create', async () => {
     // como esta en un ngOnInit tenemos que configurar antes de llamarlo "fixture.detectChanges()"
     const productId = '1';
     //Estamos utilizando RouterTestingHarness, una herramienta que facilita la prueba de rutas en Angular.
@@ -59,9 +67,26 @@ fdescribe('ProductDetailComponent', () => {
     productService.getOne.and.returnValue(mockObservable(productMock));
 
     fixture.detectChanges(); //ngOnInit start
+    expect(component).toBeTruthy();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render the title and price product in the DOM', async () => {
+    const productId = '2';
+    const productMock = {
+      ...generateOneProduct(),
+      id: productId,
+    };
+    productService.getOne.and.returnValue(mockObservable(productMock));
+
+    const harness = await RouterTestingHarness.create(`products/${productId}`);
+    fixture.detectChanges(); //ngOnInit start
+
+    const titleText = getTextHarness(harness, 'title');
+    const priceText = getTextHarness(harness, 'price');
+
+    expect(titleText).toContain(productMock.title);
+    expect(priceText).toContain(productMock.price);
+
+    expect(productService.getOne).toHaveBeenCalledWith(productId);
   });
 });

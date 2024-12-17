@@ -2,15 +2,18 @@
   <article>
     <a (click)="goToBack()">Back</a>
     @if (product) {
-
     <div class="detail">
       <figure>
-        <img [src]="product.images[0]" [alt]="product.title" />
+        <img
+          data-testid="img"
+          [src]="product.images[0]"
+          [alt]="product.title"
+        />
       </figure>
 
       <div>
-        <h1>{{ product.title }}</h1>
-        <h2>{{ product.price | currency }}</h2>
+        <h1 class="title1" data-testid="title">{{ product.title }}</h1>
+        <h2 data-testid="price">{{ product.price | currency }}</h2>
       </div>
     </div>
     }
