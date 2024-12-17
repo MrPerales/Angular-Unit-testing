@@ -1,9 +1,15 @@
 import { Type } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { RouterTestingHarness } from '@angular/router/testing';
 
 export function getText<T>(fixture: ComponentFixture<T>, testId: string) {
   const debugElement = queryById(fixture, testId);
+  const element: HTMLElement = debugElement.nativeElement;
+  return element.textContent;
+}
+export function getTextHarness(harness: RouterTestingHarness, testId: string) {
+  const debugElement = queryById(harness.fixture, testId);
   const element: HTMLElement = debugElement.nativeElement;
   return element.textContent;
 }
