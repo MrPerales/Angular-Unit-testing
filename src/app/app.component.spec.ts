@@ -2,6 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { provideRouter, RouterLink } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+
+@Component({
+  selector: 'app-banner',
+  standalone: true,
+  template: '<div></div>',
+})
+export class BannerComponentMock {}
+
+@Component({
+  selector: 'app-footer',
+  standalone: true,
+  template: '<div></div>',
+})
+export class FooterComponentMock {}
 
 fdescribe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -9,8 +24,14 @@ fdescribe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, RouterLink],
+      imports: [
+        AppComponent,
+        RouterLink,
+        BannerComponentMock,
+        FooterComponentMock,
+      ],
       providers: [provideRouter([])],
+      // schemas:[NO_ERRORS_SCHEMA] //para ignorar los warnings de los componentes no declarados
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
