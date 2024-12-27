@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 
 import { ProductDetailComponent } from './product-detail.component';
 import { ProductsService } from '../../../services/product.service';
@@ -6,14 +11,8 @@ import { provideRouter } from '@angular/router';
 import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
-import {
-  getText,
-  getTextHarness,
-  mockObservable,
-  queryById,
-} from '../../../../testing';
+import { asyncData, getTextHarness, mockObservable } from '../../../../testing';
 import { generateOneProduct } from '../../../models/product.mock';
-import { By } from '@angular/platform-browser';
 
 fdescribe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;
@@ -26,6 +25,7 @@ fdescribe('ProductDetailComponent', () => {
       'getOne',
     ]); //spy
     const locationSpy = jasmine.createSpyObj('Location', ['back']);
+
     await TestBed.configureTestingModule({
       imports: [ProductDetailComponent],
       providers: [
@@ -47,7 +47,6 @@ fdescribe('ProductDetailComponent', () => {
     productService = TestBed.inject(
       ProductsService
     ) as jasmine.SpyObj<ProductsService>; //productService como
-
     location = TestBed.inject(Location) as jasmine.SpyObj<Location>;
     component = fixture.componentInstance;
   });
@@ -89,4 +88,35 @@ fdescribe('ProductDetailComponent', () => {
 
     expect(productService.getOne).toHaveBeenCalledWith(productId);
   });
+  ///////////////// failed  ////////////////////////////
+  // it('should go to back without id param', async () => {
+  //   const productId = '';
+
+  //    const harness = await RouterTestingHarness.create();
+  //    await harness.navigateByUrl(
+  //      `products/${productId}`,
+  //      ProductDetailComponent
+  //    );
+  //   location.back.and.callThrough(); //mocking
+  //   fixture.detectChanges(); //ngOnInit start
+  //   expect(component.goToBack).toHaveBeenCalled();
+  //   expect(location.back).toHaveBeenCalled();
+  // });
+
+  // it('should change the status "loading" => "success"', fakeAsync(() => {
+  //   expect(component.status).withContext('init').toEqual('init');
+
+  //   const productId = '1';
+  //   const productMock = { ...generateOneProduct(), id: productId };
+  //   productService.getOne.and.returnValue(asyncData(productMock)); //async data para tener el control con tick()
+  //   fixture.detectChanges();
+  //   expect(productService.getOne).toHaveBeenCalled();
+  //   // expect(component.status).withContext('loading').toBe('loading');
+
+  //   tick();
+
+  //   fixture.detectChanges();
+  //   // expect(component.status).withContext('success').toBe('success');
+  // }));
+  //////////////////////////////////////////////
 });

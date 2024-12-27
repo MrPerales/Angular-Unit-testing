@@ -18,6 +18,8 @@ export class ProductDetailComponent {
     private location: Location
   ) {}
   product: Product | null = null;
+  status: 'loading' | 'success' | 'error' | 'init' = 'init';
+
   ngOnInit() {
     this.route.paramMap.subscribe({
       next: (param) => {
@@ -32,8 +34,14 @@ export class ProductDetailComponent {
   }
 
   private getProductDetail(productId: string) {
+    console.log(this.status);
+
+    this.status = 'loading';
+    console.log(this.status);
+
     this.productsService.getOne(productId).subscribe({
       next: (product) => {
+        this.status = 'success';
         this.product = product;
       },
       error: (error) => {
