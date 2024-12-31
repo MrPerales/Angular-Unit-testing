@@ -14,7 +14,6 @@ import { TokenService } from './../services/token.service';
 export class AuthService {
   private apiUrl = `${environment.API_URL}/api/v1/auth`;
   private user = new BehaviorSubject<User | null>(null);
-  user$ = this.user.asObservable();
 
   constructor(private http: HttpClient, private tokenService: TokenService) {}
 
@@ -23,6 +22,9 @@ export class AuthService {
     if (token) {
       this.getProfile().subscribe();
     }
+  }
+  getUser() {
+    return this.user.asObservable();
   }
 
   login(email: string, password: string) {
