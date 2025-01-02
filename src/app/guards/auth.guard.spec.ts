@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
 import {
   fakeActivatedRouteSnapshot,
+  fakeParamMap,
   fakeRouterStateSnapshot,
   mockObservable,
 } from '../../testing';
@@ -39,7 +40,11 @@ fdescribe('Test authGuard', () => {
     expect(executeGuard).toBeTruthy();
   });
   it('should return true with session', (doneFn) => {
-    const activatedRoute = fakeActivatedRouteSnapshot({});
+    const activatedRoute = fakeActivatedRouteSnapshot({
+      paramMap: fakeParamMap({
+        idProduct: '123',
+      }),
+    });
     const routerState = fakeRouterStateSnapshot({});
     const userMock = generateOneUser();
     authService.getUser.and.returnValue(mockObservable(userMock));
@@ -52,7 +57,30 @@ fdescribe('Test authGuard', () => {
     });
   });
   it('should return false without session', (doneFn) => {
-    const activatedRoute = fakeActivatedRouteSnapshot({});
+    const activatedRoute = fakeActivatedRouteSnapshot({
+      paramMap: fakeParamMap({
+        idProduct: '123',
+      }),
+    });
+    const routerState = fakeRouterStateSnapshot({});
+    authService.getUser.and.returnValue(mockObservable(null));
+    const guardResponse = TestBed.runInInjectionContext(
+      () => authGuard(activatedRoute, routerState) as Observable<boolean>
+    );
+    guardResponse.subscribe((rta) => {
+      expect(rta).toBeFalse();
+      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      doneFn();
+    });
+  });
+
+  it('should return false with idProduct Params', (doneFn) => {
+    const activatedRoute = fakeActivatedRouteSnapshot({
+      //ya que utilizamos route.paramMap.get('idProduct'); o . has('idProduct')
+      paramMap: fakeParamMap({
+        idProduct: '123',
+      }),
+    });
     const routerState = fakeRouterStateSnapshot({});
     authService.getUser.and.returnValue(mockObservable(null));
     const guardResponse = TestBed.runInInjectionContext(

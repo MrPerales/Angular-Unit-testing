@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { map } from 'rxjs';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (route, state) => {
   const tokenService: TokenService = inject(TokenService);
   const authService: AuthService = inject(AuthService);
   const router: Router = inject(Router);
@@ -15,6 +15,12 @@ export const authGuard: CanActivateFn = () => {
   //   return false
   // }
   // return true;
+
+  // route.params['idProduct']; //
+  // route.data['idProduct']
+  // route.queryParams['idProduct']
+  route.paramMap.get('idProduct');
+  route.paramMap.has('idProduct');
   return authService.getUser().pipe(
     map((user) => {
       if (!user) {
