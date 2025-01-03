@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HighligthDirective } from '../../directives/highligth.directive';
 import { ReversePipe } from '../../pipes/reverse.pipe';
+import { Product } from '../../models/product.model';
+import { ProductsService } from '../../services/product.service';
 
 @Component({
   selector: 'app-others',
@@ -13,4 +15,13 @@ import { ReversePipe } from '../../pipes/reverse.pipe';
 export class OthersComponent {
   color = 'orange';
   text = 'roma';
+  products: Product[] = [];
+  constructor(private productService: ProductsService) {}
+  ngOnInit() {
+    this.productService.getAll().subscribe({
+      next: (data) => {
+        this.products = data;
+      },
+    });
+  }
 }
