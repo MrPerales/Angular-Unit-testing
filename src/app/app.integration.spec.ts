@@ -9,38 +9,7 @@ import { AppComponent } from './app.component';
 import { provideRouter, Router, RouterLinkWithHref } from '@angular/router';
 import { clickElement, query, queryAllByDirective } from '../testing';
 
-@Component({
-  selector: 'pico-preview',
-  standalone: true,
-  template: '<div></div>',
-})
-export class PicoPreviewComponentMock {}
-@Component({
-  selector: 'app-people',
-  standalone: true,
-  template: '<div></div>',
-})
-export class PeopleComponentMock {}
-@Component({
-  selector: 'app-others',
-  standalone: true,
-  template: '<div></div>',
-})
-export class OthersComponentMock {}
-const routes = [
-  {
-    path: 'pico-preview',
-    component: PicoPreviewComponentMock,
-  },
-  {
-    path: 'people',
-    component: PeopleComponentMock,
-  },
-  {
-    path: 'others',
-    component: OthersComponentMock,
-  },
-];
+import { routes } from './app.routes';
 
 fdescribe('AppComponent Integration Test', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -49,12 +18,7 @@ fdescribe('AppComponent Integration Test', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        AppComponent,
-        PicoPreviewComponentMock,
-        PeopleComponentMock,
-        OthersComponentMock,
-      ],
+      imports: [AppComponent],
       providers: [provideRouter(routes)],
       schemas: [NO_ERRORS_SCHEMA], //para ignorar los warnings de los componentes no declarados
     }).compileComponents();
@@ -83,6 +47,15 @@ fdescribe('AppComponent Integration Test', () => {
     expect(router.url).toEqual('/others');
     // comporbamos si el componente es el esperado en la ruta others
     const componentElement = query(fixture, 'app-others');
+    expect(componentElement).not.toBeNull();
+  }));
+  it('should render PicoPreviewComponent when clicked', fakeAsync(() => {
+    clickElement(fixture, 'pico-preview-link', true);
+    tick();
+    fixture.detectChanges(); //ngOnInit -PicoPreviewComponent
+    expect(router.url).toEqual('/pico-preview');
+
+    const componentElement = query(fixture, 'app-pico-preview');
     expect(componentElement).not.toBeNull();
   }));
 });

@@ -5,8 +5,10 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './pico-preview.component.html',
-  styleUrl: './pico-preview.component.scss'
+  styleUrl: './pico-preview.component.scss',
 })
 export class PicoPreviewComponent {
-
+  ngOnInit() {
+    console.log('init PicoPeviewComponent');
+  }
 }
