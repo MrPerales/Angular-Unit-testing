@@ -9,12 +9,22 @@
   </p>
   <nav>
     <ul>
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/products">Products</a></li>
-      <li><a routerLink="/pico-preview">Pico Preview</a></li>
-      <li><a routerLink="/people">People</a></li>
-      <li><a routerLink="/others">Others</a></li>
-      <li><a routerLink="/auth/register">Register</a></li>
+      <li><a data-testid="" routerLink="/">Home</a></li>
+      <li>
+        <a data-testid="products-link" routerLink="/products">Products</a>
+      </li>
+      <li>
+        <a data-testid="pico-preview-link" routerLink="/pico-preview">
+          Pico Preview
+        </a>
+      </li>
+      <li><a data-testid="people-link" routerLink="/people">People</a></li>
+      <li><a data-testid="others-link" routerLink="/others">Others</a></li>
+      <li>
+        <a data-testid="auth-register-link" routerLink="/auth/register">
+          Register
+        </a>
+      </li>
     </ul>
   </nav>
 </header>
