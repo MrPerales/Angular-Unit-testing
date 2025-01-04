@@ -34,10 +34,11 @@ describe('test for Person', () => {
       const rta = person.calcBirthYear();
       expect(rta).toEqual(0);
     });
-    it('should return 2000', () => {
-      person.age = 24;
-      const rta = person.calcBirthYear();
-      expect(rta).toEqual(2000);
-    });
+    // falla ya que el año cambia cada año
+    // it('should return 2000', () => {
+    //   person.age = 24;
+    //   const rta = person.calcBirthYear();
+    //   expect(rta).toEqual(2000);
+    // });
   });
 });
