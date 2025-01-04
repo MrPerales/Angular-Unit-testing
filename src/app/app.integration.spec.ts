@@ -25,7 +25,7 @@ import { generateOneUser } from './models/user.mock';
 // nota: para las routes que son lazy load no se pueden testear ,
 //  se tienen que testear en su propio modulo
 
-fdescribe('AppComponent Integration Test', () => {
+describe('AppComponent Integration Test', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
   let router: Router;

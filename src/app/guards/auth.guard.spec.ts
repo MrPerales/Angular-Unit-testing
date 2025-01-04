@@ -13,7 +13,7 @@ import {
 import { Observable } from 'rxjs';
 import { generateOneUser } from '../models/user.mock';
 
-fdescribe('Test authGuard', () => {
+describe('Test authGuard', () => {
   let authService: jasmine.SpyObj<AuthService>;
   let tokenService: jasmine.SpyObj<TokenService>;
   let router: jasmine.SpyObj<Router>;
@@ -93,7 +93,7 @@ fdescribe('Test authGuard', () => {
     });
   });
 });
-// fdescribe('authGuard', () => {
+// describe('authGuard', () => {
 //   const executeGuard: CanActivateFn = (...guardParameters) =>
 //     TestBed.runInInjectionContext(() => authGuard(...guardParameters));
 //   beforeEach(() => {

@@ -34,10 +34,7 @@ export class ProductDetailComponent {
   }
 
   private getProductDetail(productId: string) {
-    console.log(this.status);
-
     this.status = 'loading';
-    console.log(this.status);
 
     this.productsService.getOne(productId).subscribe({
       next: (product) => {

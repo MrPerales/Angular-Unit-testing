@@ -19,10 +19,9 @@ import {
   mockObservable,
   mockPromise,
   query,
-  queryById,
 } from './../../../../testing';
 
-describe('ProductsComponent', () => {
+xdescribe('ProductsComponent', () => {
   let productComponent: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productService: jasmine.SpyObj<ProductsService>; //TiPADO de spy

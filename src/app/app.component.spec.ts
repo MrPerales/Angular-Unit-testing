@@ -18,7 +18,7 @@ export class BannerComponentMock {}
 })
 export class FooterComponentMock {}
 
-fdescribe('AppComponent', () => {
+describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
 

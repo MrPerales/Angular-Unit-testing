@@ -21,7 +21,7 @@ import {
 import { generateOneUser } from '../../../models/user.mock';
 import { Router } from '@angular/router';
 
-fdescribe('RegisterFormComponent', () => {
+describe('RegisterFormComponent', () => {
   let component: RegisterFormComponent;
   let fixture: ComponentFixture<RegisterFormComponent>;
   let userService: jasmine.SpyObj<UserService>;

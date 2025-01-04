@@ -10,7 +10,7 @@ export class MapsService {
     // api del navegador la cual no esta injectada
     navigator.geolocation.getCurrentPosition((resp) => {
       const { latitude, longitude } = resp.coords;
-      console.log(resp);
+      // console.log(resp);
 
       // asignamos los valores
       this.center = { lat: latitude, long: longitude };

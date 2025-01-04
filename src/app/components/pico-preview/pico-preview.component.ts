@@ -9,6 +9,6 @@ import { Component } from '@angular/core';
 })
 export class PicoPreviewComponent {
   ngOnInit() {
-    console.log('init PicoPeviewComponent');
+    // console.log('init PicoPeviewComponent');
   }
 }

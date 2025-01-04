@@ -167,7 +167,6 @@ class HostComponent {
   person = new Person('name', 'lastName', 30, 80, 1.67);
   selectedPerson: Person | undefined;
   onSelected(per: Person) {
-    console.log(per);
     this.selectedPerson = per;
   }
 }

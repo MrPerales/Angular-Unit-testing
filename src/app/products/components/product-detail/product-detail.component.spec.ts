@@ -11,10 +11,10 @@ import { provideRouter } from '@angular/router';
 import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { asyncData, getTextHarness, mockObservable } from '../../../../testing';
+import { getTextHarness, mockObservable } from '../../../../testing';
 import { generateOneProduct } from '../../../models/product.mock';
 
-fdescribe('ProductDetailComponent', () => {
+describe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;
   let fixture: ComponentFixture<ProductDetailComponent>;
   let productService: jasmine.SpyObj<ProductsService>; //TiPADO de spy

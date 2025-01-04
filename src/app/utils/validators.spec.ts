@@ -84,7 +84,7 @@ describe('Tests for MyValidators', () => {
       validator(control).subscribe({
         next: (rta: any) => {
           // assert
-          console.log(rta);
+          // console.log(rta);
 
           expect(rta).toBeNull();
           doneFn();
