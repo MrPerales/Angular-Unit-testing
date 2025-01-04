@@ -69,7 +69,7 @@ fdescribe('Test authGuard', () => {
     );
     guardResponse.subscribe((rta) => {
       expect(rta).toBeFalse();
-      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
       doneFn();
     });
   });
@@ -88,7 +88,7 @@ fdescribe('Test authGuard', () => {
     );
     guardResponse.subscribe((rta) => {
       expect(rta).toBeFalse();
-      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
       doneFn();
     });
   });

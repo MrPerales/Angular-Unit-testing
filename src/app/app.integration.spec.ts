@@ -11,6 +11,7 @@ import {
   asyncData,
   clickElement,
   getText,
+  mockObservable,
   query,
   queryAllByDirective,
 } from '../testing';
@@ -18,6 +19,8 @@ import {
 import { routes } from './app.routes';
 import { ProductsService } from './services/product.service';
 import { generateManyProducts } from './models/product.mock';
+import { AuthService } from './services/auth.service';
+import { generateOneUser } from './models/user.mock';
 
 // nota: para las routes que son lazy load no se pueden testear ,
 //  se tienen que testear en su propio modulo
@@ -27,21 +30,25 @@ fdescribe('AppComponent Integration Test', () => {
   let component: AppComponent;
   let router: Router;
   let productService: jasmine.SpyObj<ProductsService>;
+  let authService: jasmine.SpyObj<AuthService>;
   beforeEach(async () => {
     const productServiceSpy = jasmine.createSpyObj('ProductsService', [
       'getAll',
     ]);
+    const authServiceSpy = jasmine.createSpyObj('AuthService', ['getUser']);
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
         provideRouter(routes),
         { provide: ProductsService, useValue: productServiceSpy },
+        { provide: AuthService, useValue: authServiceSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA], //para ignorar los warnings de los componentes no declarados
     }).compileComponents();
     productService = TestBed.inject(
       ProductsService
     ) as jasmine.SpyObj<ProductsService>;
+    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -60,10 +67,13 @@ fdescribe('AppComponent Integration Test', () => {
     expect(links.length).toEqual(6);
   });
 
-  it('should render OthersComponent when clicked and render product length', fakeAsync(() => {
+  it('should render OthersComponent when clicked and render product length with session ', fakeAsync(() => {
     // mock del servicio de productos el cual usamos en el componente others
     const productMock = generateManyProducts(10);
     productService.getAll.and.returnValue(asyncData(productMock));
+
+    const user = generateOneUser();
+    authService.getUser.and.returnValue(mockObservable(user));
 
     clickElement(fixture, 'others-link', true); //navegamos a la ruta others
     tick(); //esperamos la navegacion y cargue el componente others
@@ -81,7 +91,19 @@ fdescribe('AppComponent Integration Test', () => {
     const text = getText(fixture, 'products-length');
     expect(text).toContain(productMock.length);
   }));
+  it('should render OthersComponent when clicked without session ', fakeAsync(() => {
+    // no hace falta mockear el servicio de productos ya que nos tiene que redirigir a home
+    authService.getUser.and.returnValue(mockObservable(null));
 
+    clickElement(fixture, 'others-link', true); //navegamos a la ruta others
+    tick(); //esperamos la navegacion y cargue el componente others
+    fixture.detectChanges(); //ngOnInit -OthersComponents
+
+    tick(); //resuelve "getAll" y actualizamos el componente
+    fixture.detectChanges();
+
+    expect(router.url).toEqual('/');
+  }));
   it('should render PicoPreviewComponent when clicked', fakeAsync(() => {
     clickElement(fixture, 'pico-preview-link', true);
     tick();
