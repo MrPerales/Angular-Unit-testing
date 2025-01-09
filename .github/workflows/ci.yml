@@ -9,7 +9,7 @@ jobs:
       - name: Node Setup
         uses: actions/setup-node@v2
           with:
-          node-version: 16.x
+            node-version: 16.x
       - name: Install Dependecies
         run: npm ci
       - name: Run Tests
