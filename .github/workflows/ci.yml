@@ -1,15 +1,15 @@
 name: CI for Angular
-on: push
+on: [push]
 jobs:
   unit-tests:
     runs-on: unbuntu-latest
     steps:
       - name: Clone Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Node Setup
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 20.x
       - name: Install Dependecies
         run: npm ci
       - name: Run Tests
