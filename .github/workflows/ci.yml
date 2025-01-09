@@ -1,0 +1,17 @@
+name: CI for Angular
+on: push
+jobs:
+  unit-tests:
+    runs-on: unbuntu-latest
+    steps:
+      - name: Clone Repo
+        uses: actions/checkout@v2
+      - name: Node Setup
+        uses: actions/setup-node@v2
+          with:
+          node-version: 16.x
+      - name: Install Dependecies
+        run: npm ci
+      - name: Run Tests
+        run: ng test --no-watch --code-coverage --browsers=Chrome
+

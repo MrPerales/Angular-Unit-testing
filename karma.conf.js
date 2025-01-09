@@ -39,6 +39,12 @@ module.exports = function (config) {
     },
     reporters: ["mocha"],
     browsers: ["Chrome"],
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: "Chrome",
+        flags: ["--no-sandbox"],
+      },
+    },
     restartOnFileChange: true,
   });
 };
