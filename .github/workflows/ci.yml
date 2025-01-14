@@ -2,7 +2,7 @@ name: CI for Angular
 on: [push]
 jobs:
   unit-tests:
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Clone Repo
         uses: actions/checkout@v4
@@ -13,4 +13,4 @@ jobs:
       - name: Install Dependecies
         run: npm ci
       - name: Run Tests
-        run: ng test --no-watch --code-coverage --browsers=Chrome
+        run: npm run test -- --no-watch --code-coverage --browsers=Chrome
